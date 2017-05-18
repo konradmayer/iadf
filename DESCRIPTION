@@ -14,7 +14,8 @@ Imports: trlboku,
     tibble,
     dplyr,
     tidyr,
-    dplR
+    dplR,
+    rlang
 Suggests: lazyeval,
     testthat
 RoxygenNote: 6.0.1

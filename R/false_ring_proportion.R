@@ -401,6 +401,8 @@ novak_index <- function(iadf, model, po = NULL, method = 'difference'){
 #'   \url{http://link.springer.com/article/10.1007/s00468-014-1108-9}.
 #' @export
 #' @seealso  \code{\link{campelo_chapman}}, \code{\link{campelo_index}}
+#' @importFrom rlang .data
+#' @importFrom dplyr %>%
 #' @examples
 #' data('example_iadf')
 #' data('example_rwl')
@@ -408,37 +410,75 @@ novak_index <- function(iadf, model, po = NULL, method = 'difference'){
 #' campelo_index(example_iadf, example_rwl, model)
 campelo_freq <- function(iadf, rwl, n = 20){
 
-  if(!is.data.frame(iadf)) {
-    stop('iadf has to be a data.frame')
+  nclass <- rlang::quo(n)
+
+  if (utils::packageVersion("dplyr") > "0.5.0") {
+    if(!is.data.frame(iadf)) {
+      stop('iadf has to be a data.frame')
+    }
+
+    if(!is.data.frame(rwl)) {
+      stop('rwl has to be a data.frame')
+    }
+
+    if(!all(as.matrix(iadf) %in% c(0, 1, NA))) {
+      stop('iadf must only contain 0, 1, and NA values')
+    }
+
+    iadf_tidy <- iadf %>%
+      tibble::rownames_to_column('year') %>%
+      tibble::as_tibble() %>%
+      dplyr::mutate(year = as.integer(.data$year)) %>%
+      tidyr::gather("series","iadf", -.data$year) %>%
+      dplyr::filter(!is.na(.data$iadf))
+
+    rwl_tidy <- trlboku::tidy_rwl(rwl) %>%
+      dplyr::mutate(class = cut(.data$rwl, !!nclass))
+
+    tmp <- dplyr::left_join(iadf_tidy, rwl_tidy, by = c("year", "series"))
+
+    freq <- tapply(tmp[['iadf']], tmp[['class']], function(y) mean(y, na.rm = TRUE))
+    class_mean <- tapply(tmp[['rwl']], tmp[['class']], function(y) mean(y, na.rm = TRUE))
+    sample_depth <- tapply(tmp[['iadf']], tmp[['class']], function(y) length(na.omit(y)))
+    out <- data.frame(class = names(freq), freq = as.vector(freq),
+                      class.mean.rwl = as.vector(class_mean),
+                      sample.depth = as.vector(sample_depth))
+    return(out)
+
+  } else { #keep code for dplyr < 0.6 for backwards compatibility
+
+    if(!is.data.frame(iadf)) {
+      stop('iadf has to be a data.frame')
+    }
+
+    if(!is.data.frame(rwl)) {
+      stop('rwl has to be a data.frame')
+    }
+
+    if(!all(as.matrix(iadf) %in% c(0, 1, NA))) {
+      stop('iadf must only contain 0, 1, and NA values')
+    }
+
+    iadf_tidy <- iadf %>%
+      tibble::rownames_to_column('year') %>%
+      tibble::as_tibble() %>%
+      dplyr::mutate_(.dots = setNames(list(lazyeval::interp(~as.numeric(var), var = as.name('year'))), 'year')) %>%
+      tidyr::gather_("series", 'iadf', dplyr::select_vars_(names(.),names(.), exclude = "year")) %>%
+      dplyr::filter_(lazyeval::interp(~(!is.na(nam)), nam = as.name('iadf')))
+
+    rwl_tidy <- trlboku::tidy_rwl(rwl) %>%
+      dplyr::mutate_(.dots = setNames(list(lazyeval::interp(~cut(r, n), r = as.name('rwl'))), 'class'))
+
+    tmp <- dplyr::left_join(iadf_tidy, rwl_tidy, by = c("year", "series"))
+
+    freq <- tapply(tmp[['iadf']], tmp[['class']], function(y) mean(y, na.rm = TRUE))
+    class_mean <- tapply(tmp[['rwl']], tmp[['class']], function(y) mean(y, na.rm = TRUE))
+    sample_depth <- tapply(tmp[['iadf']], tmp[['class']], function(y) length(na.omit(y)))
+    out <- data.frame(class = names(freq), freq = as.vector(freq),
+                      class.mean.rwl = as.vector(class_mean),
+                      sample.depth = as.vector(sample_depth))
+    return(out)
   }
-
-  if(!is.data.frame(rwl)) {
-    stop('rwl has to be a data.frame')
-  }
-
-  if(!all(as.matrix(iadf) %in% c(0, 1, NA))) {
-    stop('iadf must only contain 0, 1, and NA values')
-  }
-
-  iadf_tidy <- iadf %>%
-    tibble::rownames_to_column('year') %>%
-    tibble::as_tibble() %>%
-    dplyr::mutate_(.dots = setNames(list(lazyeval::interp(~as.numeric(var), var = as.name('year'))), 'year')) %>%
-    tidyr::gather_("series", 'iadf', dplyr::select_vars_(names(.),names(.), exclude = "year")) %>%
-    dplyr::filter_(lazyeval::interp(~(!is.na(nam)), nam = as.name('iadf')))
-
-  rwl_tidy <- trlboku::tidy_rwl(rwl) %>%
-    dplyr::mutate_(.dots = setNames(list(lazyeval::interp(~cut(r, n), r = as.name('rwl'))), 'class'))
-
-  tmp <- dplyr::left_join(iadf_tidy, rwl_tidy, by = c("year", "series"))
-
-  freq <- tapply(tmp[['iadf']], tmp[['class']], function(y) mean(y, na.rm = TRUE))
-  class_mean <- tapply(tmp[['rwl']], tmp[['class']], function(y) mean(y, na.rm = TRUE))
-  sample_depth <- tapply(tmp[['iadf']], tmp[['class']], function(y) length(na.omit(y)))
-  out <- data.frame(class = names(freq), freq = as.vector(freq),
-                    class.mean.rwl = as.vector(class_mean),
-                    sample.depth = as.vector(sample_depth))
-  return(out)
 }
 
 # campelo chapman find start values --------------------------------------------
@@ -559,6 +599,7 @@ campelo_chapman <- function(campelo_freq_object, min.n = 15, start = NULL,
 #' @return a data frame
 #' @export
 #' @seealso \code{\link{campelo_freq}}, \code{\link{campelo_chapman}}
+#' @importFrom rlang .data
 #' @importFrom dplyr %>%
 #' @references
 #'   Campelo, F., Vieira, J., Battipaglia, G. et al. Which matters most for the
@@ -571,44 +612,88 @@ campelo_chapman <- function(campelo_freq_object, min.n = 15, start = NULL,
 #' model <- campelo_chapman(campelo_freq(example_iadf, example_rwl))
 #' campelo_index(example_iadf, example_rwl, model)
 campelo_index <- function(iadf, rwl, model){
-  if(!is.data.frame(iadf)) {
-    stop('iadf has to be a data.frame')
+
+  if (utils::packageVersion("dplyr") > "0.5.0") {
+
+    if(!is.data.frame(iadf)) {
+      stop('iadf has to be a data.frame')
+    }
+
+    if(!is.data.frame(rwl)) {
+      stop('rwl has to be a data.frame')
+    }
+
+    if(!all(as.matrix(iadf) %in% c(0, 1, NA))) {
+      stop('iadf must only contain 0, 1, and NA values')
+    }
+
+    iadf_tidy <- iadf %>%
+      tibble::rownames_to_column('year') %>%
+      tibble::as_tibble() %>%
+      dplyr::mutate(year = as.numeric(.data$year)) %>%
+      tidyr::gather("series", 'iadf', -.data$year) %>%
+      dplyr::filter(!is.na(.data$iadf))
+
+    rwl_tidy <- trlboku::tidy_rwl(rwl)
+
+    tmp <- dplyr::left_join(iadf_tidy, rwl_tidy, by = c("year", "series")) %>%
+      dplyr::mutate(prediction = predict(model, newdata = list(ring_width = .data$rwl)))%>%
+      dplyr::mutate(index = .data$iadf - .data$prediction) %>%
+      dplyr::select('year', 'series' , 'index') %>%
+      tidyr::spread('series', 'index')
+
+    mean_index <- cbind(tmp['year'], rowMeans(dplyr::select_(tmp, '-year'),
+                                              na.rm = TRUE))
+    names(mean_index) <- c('year', 'index')
+
+    spline <- dplR::ffcsaps(mean_index[['index']])
+    detrend_index <- dplyr::mutate(mean_index, detrended_index = .data$index - spline)
+
+    return(detrend_index)
+
+  } else { #keep code for dplyr < 0.6 for backwards compatibility
+
+    if(!is.data.frame(iadf)) {
+      stop('iadf has to be a data.frame')
+    }
+
+    if(!is.data.frame(rwl)) {
+      stop('rwl has to be a data.frame')
+    }
+
+    if(!all(as.matrix(iadf) %in% c(0, 1, NA))) {
+      stop('iadf must only contain 0, 1, and NA values')
+    }
+
+    iadf_tidy <- iadf %>%
+      tibble::rownames_to_column('year') %>%
+      tibble::as_tibble() %>%
+      dplyr::mutate_(.dots = setNames(list(lazyeval::interp(~as.numeric(var), var = as.name('year'))), 'year')) %>%
+      tidyr::gather_("series", 'iadf', dplyr::select_vars_(names(.),names(.), exclude = "year")) %>%
+      dplyr::filter_(lazyeval::interp(~(!is.na(nam)), nam = as.name('iadf')))
+
+    rwl_tidy <- trlboku::tidy_rwl(rwl)
+
+    tmp <- dplyr::left_join(iadf_tidy, rwl_tidy, by = c("year", "series")) %>%
+      dplyr::mutate_(.dots = setNames(list(
+        lazyeval::interp(~predict(md, newdata = list(ring_width = .[['rwl']])),
+                         md = as.name('model'))), 'prediction')) %>%
+      dplyr::mutate_(.dots = setNames(list(
+        lazyeval::interp(~ia - pr, ia = as.name('iadf'),
+                         pr = as.name('prediction'))), 'index')) %>%
+      dplyr::select_('year', 'series' , 'index') %>%
+      tidyr::spread_('series', 'index')
+
+    mean_index <- cbind(tmp['year'], rowMeans(dplyr::select_(tmp, '-year'),
+                                              na.rm = TRUE))
+    names(mean_index) <- c('year', 'index')
+
+    spline <- dplR::ffcsaps(mean_index[['index']])
+    detrend_index <- dplyr::mutate_(mean_index, .dots = setNames(list(
+      lazyeval::interp(~ i - s, i = as.name('index'), s = as.name('spline'))),
+      'detrended_index'))
+
+    return(detrend_index)
+
   }
-
-  if(!is.data.frame(rwl)) {
-    stop('rwl has to be a data.frame')
-  }
-
-  if(!all(as.matrix(iadf) %in% c(0, 1, NA))) {
-    stop('iadf must only contain 0, 1, and NA values')
-  }
-
-  iadf_tidy <- iadf %>%
-    tibble::rownames_to_column('year') %>%
-    tibble::as_tibble() %>%
-    dplyr::mutate_(.dots = setNames(list(lazyeval::interp(~as.numeric(var), var = as.name('year'))), 'year')) %>%
-    tidyr::gather_("series", 'iadf', dplyr::select_vars_(names(.),names(.), exclude = "year")) %>%
-    dplyr::filter_(lazyeval::interp(~(!is.na(nam)), nam = as.name('iadf')))
-
-  rwl_tidy <- trlboku::tidy_rwl(rwl)
-
-  tmp <- dplyr::left_join(iadf_tidy, rwl_tidy, by = c("year", "series")) %>%
-    dplyr::mutate_(.dots = setNames(list(
-      lazyeval::interp(~predict(md, newdata = list(ring_width = .[['rwl']])),
-                       md = as.name('model'))), 'prediction')) %>%
-    dplyr::mutate_(.dots = setNames(list(
-      lazyeval::interp(~ia - pr, ia = as.name('iadf'),
-                       pr = as.name('prediction'))), 'index')) %>%
-    dplyr::select_('year', 'series' , 'index') %>%
-    tidyr::spread_('series', 'index')
-
-  mean_index <- cbind(tmp['year'], rowMeans(dplyr::select_(tmp, '-year'),
-                                            na.rm = TRUE))
-  names(mean_index) <- c('year', 'index')
-
-  spline <- dplR::ffcsaps(mean_index[['index']])
-  detrend_index <- dplyr::mutate_(mean_index, .dots = setNames(list(
-    lazyeval::interp(~ i - s, i = as.name('index'), s = as.name('spline'))),
-    'detrended_index'))
-  return(detrend_index)
 }
