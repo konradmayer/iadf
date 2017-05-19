@@ -20,17 +20,12 @@ frp <- function(iadf) {
     stop('the data frame must only contain 0, 1, and NA values')
   }
 
-  N <- apply(iadf, 1, FUN = function(y) sum(y, na.rm = TRUE))
-  n <- apply(iadf, 1, FUN = function(y) length(y) - sum(is.na(y)))
+  n <- ncol(iadf)-rowSums(is.na(iadf), na.rm = TRUE)
 
   if(any(n == 0)){warning('there are no trees in year: ',
                           paste(names(n[n == 0]), collapse = ', '))}
-  n[n == 0] <- NA #not to divide by 0
 
-  iadfp <- N / n
-
-  #this alternative version is faster but doesnt show the appropriate warnings
-  #iadfp <- rowMeans(iadf, na.rm = TRUE)
+  iadfp <- rowMeans(iadf, na.rm = TRUE)
 
   out <- data.frame(year = as.numeric(names(iadfp)), frp = iadfp)
   return(out)
@@ -59,19 +54,15 @@ afrp <- function(iadf) {
     stop('the data frame must only contain 0, 1, and NA values')
   }
 
-  N <- apply(iadf, 1, FUN = function(y) sum(y, na.rm = TRUE))
-  n <- apply(iadf, 1, FUN = function(y) length(y) - sum(is.na(y)))
+  n <- ncol(iadf)-rowSums(is.na(iadf), na.rm = TRUE)
 
   if(any(n == 0)){warning('there are no trees in year: ',
                           paste(names(n[n == 0]), collapse = ', '))}
-  n[n == 0] <- NA #not to divide by 0
 
-  iadfp <- N / n
-
-  #this alternative version is faster but doesnt show the appropriate warnings
-  #iadfp <- rowMeans(iadf, na.rm = TRUE)
+  iadfp <- rowMeans(iadf, na.rm = TRUE)
 
   aiadfp <- iadfp * sqrt(n)
+
   out <- data.frame(year = as.numeric(names(aiadfp)), afrp = aiadfp)
   return(out)
 }
@@ -116,7 +107,7 @@ novak_freq <- function(iadf, po = NULL){
   }
 
   aligned <- trlboku::to_cambial_age(iadf, po)
-  freq <- apply(aligned, 1, function(y) mean(y, na.rm = TRUE))
+  freq <- rowMeans(aligned, na.rm = TRUE)
   n <- rowSums(!is.na(aligned))
   out <- data.frame(cambial.age = seq_along(freq), freq = freq, sample.depth = n)
   return(out)
@@ -437,12 +428,13 @@ campelo_freq <- function(iadf, rwl, n = 20){
 
     tmp <- dplyr::left_join(iadf_tidy, rwl_tidy, by = c("year", "series"))
 
-    freq <- tapply(tmp[['iadf']], tmp[['class']], function(y) mean(y, na.rm = TRUE))
-    class_mean <- tapply(tmp[['rwl']], tmp[['class']], function(y) mean(y, na.rm = TRUE))
-    sample_depth <- tapply(tmp[['iadf']], tmp[['class']], function(y) length(na.omit(y)))
-    out <- data.frame(class = names(freq), freq = as.vector(freq),
-                      class.mean.rwl = as.vector(class_mean),
-                      sample.depth = as.vector(sample_depth))
+    out <- tmp %>%
+      dplyr::group_by(.data$class) %>%
+      dplyr::summarise(freq = mean(.data$iadf, na.rm = TRUE),
+                class.mean.rwl = mean(.data$rwl, na.rm = TRUE),
+                sample.depth = length(.data$iadf)) %>%
+      as.data.frame
+
     return(out)
 
   } else { #keep code for dplyr < 0.6 for backwards compatibility
