@@ -15,7 +15,11 @@ Imports: trlboku,
     dplyr,
     tidyr,
     dplR,
-    rlang
+    rlang,
+    stats
 Suggests: lazyeval,
-    testthat
+    testthat,
+    knitr,
+    rmarkdown
 RoxygenNote: 6.0.1
+VignetteBuilder: knitr

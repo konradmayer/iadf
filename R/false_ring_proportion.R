@@ -375,7 +375,7 @@ novak_index <- function(iadf, model, po = NULL, method = 'difference'){
   }
 
   longest <- max(trlboku::series_length(iadf) + po[,2])
-  rc <- predict(model, newdata = list(cambial_age = seq_len(longest)))
+  rc <- stats::predict(model, newdata = list(cambial_age = seq_len(longest)))
   detrended <- trlboku:::detrend_given_rc(iadf, rc, po, method = method)
   tmp <- rowMeans(detrended, na.rm = TRUE)
   out <- data.frame(year = as.numeric(names(tmp)), index = as.vector(tmp))
@@ -637,7 +637,7 @@ campelo_index <- function(iadf, rwl, model){
     rwl_tidy <- trlboku::tidy_rwl(rwl)
 
     tmp <- dplyr::left_join(iadf_tidy, rwl_tidy, by = c("year", "series")) %>%
-      dplyr::mutate(prediction = predict(model, newdata = list(ring_width = .data$rwl)))%>%
+      dplyr::mutate(prediction = stats::predict(model, newdata = list(ring_width = .data$rwl)))%>%
       dplyr::mutate(index = .data$iadf - .data$prediction) %>%
       dplyr::select('year', 'series' , 'index') %>%
       tidyr::spread('series', 'index')
