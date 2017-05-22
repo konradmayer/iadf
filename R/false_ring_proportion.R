@@ -186,7 +186,8 @@ novak_weibull_find_start <- function(novak_freq_object, min.n = 15, max_a = 10, 
 #' data('example_iadf')
 #' model <- novak_negexp(novak_freq(example_iadf), 15)
 #' novak_index(example_iadf, model)
-novak_weibull <- function(novak_freq_object, min.n = 15, start = NULL, make.plot = TRUE, ...){
+novak_weibull <- function(novak_freq_object, min.n = 15, start = NULL,
+                          max.iter = 500,make.plot = TRUE, ...){
 
   if(!any(class(novak_freq_object) == 'novak.freq')) {
     stop('input must be derived from novak_freq()')
@@ -201,7 +202,8 @@ novak_weibull <- function(novak_freq_object, min.n = 15, start = NULL, make.plot
   if(is.null(start)) {start <- list(a = 4, b = 0.33, c = 15.5)}
 
   try({
-    wbu <- nls(freq ~ a*b*c*cambial_age^2*exp(-a*cambial_age^b), start = start)
+    wbu <- nls(freq ~ a*b*c*cambial_age^2*exp(-a*cambial_age^b), start = start,
+               control = list(maxiter = max.iter))
 
     if(make.plot){
       ndata <- data.frame(cambial_age = seq(0, max(cambial_age, na.rm = TRUE), by = 0.1))
@@ -240,7 +242,7 @@ novak_negexp_find_start <- function(novak_freq_object, min.n = 15, max_a = 1, ma
   cambial_age <- tmp[['cambial.age']]
   freq <- tmp[['freq']]
 
-  start <- list(a = 0.01, b=1, c=1)
+  start <- list(a = max_a/2, b = max_b/2, c = max_c/2)
   observe <- FALSE
 
   a0 <- c(); b0 <- c(); c0 <- c(); x <- c(); return_value <- c()
@@ -296,7 +298,8 @@ novak_negexp_find_start <- function(novak_freq_object, min.n = 15, max_a = 1, ma
 #' data('example_iadf')
 #' model <- novak_negexp(novak_freq(example_iadf), 15)
 #' novak_index(example_iadf, model)
-novak_negexp <- function(novak_freq_object, min.n = 15, start = NULL, make.plot = TRUE, ...){
+novak_negexp <- function(novak_freq_object, min.n = 15, start = NULL,
+                         max.iter = 500, make.plot = TRUE, ...){
 
   if(!any(class(novak_freq_object) == 'novak.freq')) {
     stop('input must be derived from novak_freq()')
@@ -311,7 +314,8 @@ novak_negexp <- function(novak_freq_object, min.n = 15, start = NULL, make.plot 
   if(is.null(start)) {start <- list(a = 0.01, b=1, c=1)}
 
   try({
-    wbu <- nls(freq ~ a + b * exp(-c*cambial_age), start = start)
+    wbu <- nls(freq ~ a + b * exp(-c*cambial_age), start = start,
+               control = list(maxiter = max.iter))
 
     if(make.plot){
       ndata <- data.frame(cambial_age = seq(0, max(cambial_age, na.rm = TRUE), by = 0.1))
@@ -505,7 +509,7 @@ campelo_chapman_find_start <- function(campelo_freq_object, min.n = 15, max_a = 
   ring_width <- tmp[['class.mean.rwl']]
   freq <- tmp[['freq']]
 
-  start <- list(a = 0.8, b = 0.03, c = 12.5)
+  start <- list(a = max_a/2, b = max_b/2, c = max_c/2)
   observe <- FALSE
 
   a0 <- c(); b0 <- c(); c0 <- c(); x <- c(); return_value <- c()
@@ -561,7 +565,7 @@ campelo_chapman_find_start <- function(campelo_freq_object, min.n = 15, max_a = 
 #' model <- campelo_chapman(campelo_freq(example_iadf, example_rwl))
 #' campelo_index(example_iadf, example_rwl, model)
 campelo_chapman <- function(campelo_freq_object, min.n = 15, start = NULL,
-                            make.plot = TRUE, ...){
+                            make.plot = TRUE, max.iter = 500, ...){
 
   if(!any(class(campelo_freq_object) == 'campelo.freq')) {
     stop('input must be derived from campelo_freq()')
@@ -576,7 +580,8 @@ campelo_chapman <- function(campelo_freq_object, min.n = 15, start = NULL,
   if(is.null(start)) {start <- list(a = 0.8, b = 0.03, c = 12.5)}
 
   try({
-    chapm <- nls(freq ~ a * (1 - exp(-b * ring_width))^c, start = start)
+    chapm <- nls(freq ~ a * (1 - exp(-b * ring_width))^c, start = start,
+                 control = list(maxiter = max.iter))
 
     if(make.plot){
       ndata <- data.frame(ring_width = seq(0, max(ring_width, na.rm = TRUE), by = 0.1))
