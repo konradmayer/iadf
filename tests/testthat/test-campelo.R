@@ -2,7 +2,7 @@ context('campelo frequency')
 
 testiadf <- data.frame('AbcAA01a' = c(1,1,0,0, NA), "AbcAA02a"=c(NA,1,1,1,NA), row.names = as.character(seq(2000, 2004, 1)))
 testrwl <- data.frame('AbcAA01a' = c(10,10,20,20, NA), "AbcAA02a"=c(NA,10,10,10,NA), row.names = as.character(seq(2000, 2004, 1)))
-testout <- data.frame(class= factor(c("(9.99,15]", "(15,20]"), levels = c("(9.99,15]", "(15,20]")),
+testout <- data.frame(class= factor(c("(9.99,15]", "(15,20]"), levels = c("(15,20]", "(9.99,15]")),
                       freq = c(1, 0),
                       class.mean.rwl=c(10, 20),
                       sample.depth = c(5, 2))

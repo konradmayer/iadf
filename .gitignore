@@ -4,4 +4,4 @@
 .Ruserdata
 .Rbuildignore
 inst/doc
-README.Rmd
+DESCRIPTION

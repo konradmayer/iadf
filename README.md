@@ -10,14 +10,27 @@ If you know any further methods which should get included or find any bugs or mi
 Installation
 ------------
 
-You can install the latest development version of the package from github with:
+`iadf` is available on CRAN and GitHub:
+
+To install the stable CRAN version:
+
+``` r
+install.packages("iadf")
+```
+
+You can install the latest development version of the package from GitHub with:
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("konradmayer/iadf")
 ```
 
-It is intended to publish this package on CRAN in near future.
+To also install the vignettes type:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("konradmayer/iadf", build_vignettes = TRUE)
+```
 
 Updating
 --------
