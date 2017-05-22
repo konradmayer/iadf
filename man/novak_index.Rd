@@ -11,8 +11,7 @@ novak_index(iadf, model, po = NULL, method = "difference")
 and years as rownames where years with IADF are marked binary with 1,
 those without with 0, years not covered by the series are set to NA.}
 
-\item{model}{a model, output of either  \code{\link[iadf]{novak_weibull}}
-or \code{\link[iadf]{novak_negexp}}}
+\item{model}{a model, output of either  \code{\link[iadf]{novak_weibull}}}
 
 \item{po}{an optional data frame of pith offsets with series names in the
 first and pith offsets in the second column}
@@ -28,7 +27,7 @@ Calculation of age corrected IADF frequencies according
 }
 \examples{
 data('example_iadf')
-model <- novak_negexp(novak_freq(example_iadf), 15)
+model <- novak_weibull(novak_freq(example_iadf), 15)
 novak_index(example_iadf, model)
 }
 \references{
@@ -38,6 +37,5 @@ Novak, Klemen and Sánchez, Miguel Angel Saz and Čufar, Katarina and Raventós,
   \url{http://booksandjournals.brillonline.com/content/journals/10.1163/22941932-00000037}.
 }
 \seealso{
-\code{\link{novak_freq}}, \code{\link{novak_weibull}},
-  \code{\link{novak_negexp}}
+\code{\link{novak_freq}}, \code{\link{novak_weibull}}
 }

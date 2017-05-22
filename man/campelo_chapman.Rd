@@ -18,6 +18,8 @@ model estimation}
 
 \item{make.plot}{logical}
 
+\item{max.iter}{maximum iterations for internally used \code{\link[stats]{nls}}}
+
 \item{...}{additional plotting arguments}
 }
 \value{

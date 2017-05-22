@@ -9,8 +9,7 @@ Description: calculate false ring proportions from data frames of intra annual
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-Imports: trlboku,
-    manipulate,
+Imports: manipulate,
     tibble,
     dplyr,
     tidyr,
@@ -21,6 +20,5 @@ Suggests: lazyeval,
     testthat,
     knitr,
     rmarkdown
-Remotes: konradmayer/trlboku
 RoxygenNote: 6.0.1
 VignetteBuilder: knitr

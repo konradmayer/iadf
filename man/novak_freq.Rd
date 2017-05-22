@@ -23,7 +23,7 @@ This function returns the frequency per cambial age as suggested
 }
 \examples{
 data('example_iadf')
-model <- novak_negexp(novak_freq(example_iadf), 15)
+model <- novak_weibull(novak_freq(example_iadf), 15)
 novak_index(example_iadf, model)
 }
 \references{
@@ -33,6 +33,6 @@ Novak, Klemen and Sánchez, Miguel Angel Saz and Čufar, Katarina and Raventós,
   \url{http://booksandjournals.brillonline.com/content/journals/10.1163/22941932-00000037}.
 }
 \seealso{
-\code{\link{novak_weibull}}, \code{\link{novak_negexp}},
+\code{\link{novak_weibull}},
   \code{\link{novak_index}}
 }

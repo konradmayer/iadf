@@ -16,6 +16,8 @@ model estimation}
 
 \item{start}{set custom start values - default to \code{list(a = 4, b = 0.33, c = 15.5)}}
 
+\item{max.iter}{maximum iterations for internally used \code{\link[stats]{nls}}}
+
 \item{make.plot}{logical}
 
 \item{...}{additional plotting arguments}
@@ -29,7 +31,7 @@ This function fits a Weibull function for the calculation of
 }
 \examples{
 data('example_iadf')
-model <- novak_negexp(novak_freq(example_iadf), 15)
+model <- novak_weibull(novak_freq(example_iadf), 15)
 novak_index(example_iadf, model)
 }
 \references{
@@ -39,6 +41,6 @@ Novak, Klemen and Sánchez, Miguel Angel Saz and Čufar, Katarina and Raventós,
   \url{http://booksandjournals.brillonline.com/content/journals/10.1163/22941932-00000037}.
 }
 \seealso{
-\code{\link{novak_freq}}, \code{\link{novak_negexp}},
+\code{\link{novak_freq}},
   \code{\link{novak_index}}
 }

@@ -83,11 +83,11 @@ afrp <- function(iadf) {
 #'   \url{http://booksandjournals.brillonline.com/content/journals/10.1163/22941932-00000037}.
 #' @return a data frame
 #' @export
-#' @seealso \code{\link{novak_weibull}}, \code{\link{novak_negexp}},
+#' @seealso \code{\link{novak_weibull}},
 #'   \code{\link{novak_index}}
 #' @examples
 #' data('example_iadf')
-#' model <- novak_negexp(novak_freq(example_iadf), 15)
+#' model <- novak_weibull(novak_freq(example_iadf), 15)
 #' novak_index(example_iadf, model)
 
 novak_freq <- function(iadf, po = NULL){
@@ -106,7 +106,7 @@ novak_freq <- function(iadf, po = NULL){
     stop('iadf must only contain 0, 1, and NA values')
   }
 
-  aligned <- trlboku::to_cambial_age(iadf, po)
+  aligned <- to_cambial_age(iadf, po)
   freq <- rowMeans(aligned, na.rm = TRUE)
   n <- rowSums(!is.na(aligned))
   out <- data.frame(cambial.age = seq_along(freq), freq = freq, sample.depth = n)
@@ -171,6 +171,7 @@ novak_weibull_find_start <- function(novak_freq_object, min.n = 15, max_a = 10, 
 #' @param min.n minimum number of samples within each cambial age to be included in
 #'   model estimation
 #' @param start set custom start values - default to \code{list(a = 4, b = 0.33, c = 15.5)}
+#' @param max.iter maximum iterations for internally used \code{\link[stats]{nls}}
 #' @param make.plot logical
 #' @param ... additional plotting arguments
 #' @references
@@ -180,14 +181,14 @@ novak_weibull_find_start <- function(novak_freq_object, min.n = 15, max_a = 10, 
 #'   \url{http://booksandjournals.brillonline.com/content/journals/10.1163/22941932-00000037}.
 #' @return a model object of class "nls"
 #' @export
-#' @seealso \code{\link{novak_freq}}, \code{\link{novak_negexp}},
+#' @seealso \code{\link{novak_freq}},
 #'   \code{\link{novak_index}}
 #' @examples
 #' data('example_iadf')
-#' model <- novak_negexp(novak_freq(example_iadf), 15)
+#' model <- novak_weibull(novak_freq(example_iadf), 15)
 #' novak_index(example_iadf, model)
 novak_weibull <- function(novak_freq_object, min.n = 15, start = NULL,
-                          max.iter = 500,make.plot = TRUE, ...){
+                          max.iter = 500, make.plot = TRUE, ...){
 
   if(!any(class(novak_freq_object) == 'novak.freq')) {
     stop('input must be derived from novak_freq()')
@@ -202,7 +203,7 @@ novak_weibull <- function(novak_freq_object, min.n = 15, start = NULL,
   if(is.null(start)) {start <- list(a = 4, b = 0.33, c = 15.5)}
 
   try({
-    wbu <- nls(freq ~ a*b*c*cambial_age^2*exp(-a*cambial_age^b), start = start,
+    wbu <- stats::nls(freq ~ a*b*c*cambial_age^2*exp(-a*cambial_age^b), start = start,
                control = list(maxiter = max.iter))
 
     if(make.plot){
@@ -228,7 +229,6 @@ novak_weibull <- function(novak_freq_object, min.n = 15, start = NULL,
 #'   and years as rownames where years with IADF are marked binary with 1,
 #'   those without with 0, years not covered by the series are set to NA.
 #' @param model a model, output of either  \code{\link[iadf]{novak_weibull}}
-#'   or \code{\link[iadf]{novak_negexp}}
 #' @return a data frame
 #' @param po an optional data frame of pith offsets with series names in the
 #'   first and pith offsets in the second column
@@ -239,11 +239,10 @@ novak_weibull <- function(novak_freq_object, min.n = 15, start = NULL,
 #'   IAWA Journal, 34, 459-474 (2013), DOI:https://doi.org/10.1163/22941932-00000037
 #'   \url{http://booksandjournals.brillonline.com/content/journals/10.1163/22941932-00000037}.
 #' @export
-#' @seealso \code{\link{novak_freq}}, \code{\link{novak_weibull}},
-#'   \code{\link{novak_negexp}}
+#' @seealso \code{\link{novak_freq}}, \code{\link{novak_weibull}}
 #' @examples
 #' data('example_iadf')
-#' model <- novak_negexp(novak_freq(example_iadf), 15)
+#' model <- novak_weibull(novak_freq(example_iadf), 15)
 #' novak_index(example_iadf, model)
 novak_index <- function(iadf, model, po = NULL, method = 'difference'){
 
@@ -267,9 +266,9 @@ novak_index <- function(iadf, model, po = NULL, method = 'difference'){
     stop('series names in po are not the same as provided in iadf')
   }
 
-  longest <- max(trlboku::series_length(iadf) + po[,2])
+  longest <- max(series_length(iadf) + po[,2])
   rc <- stats::predict(model, newdata = list(cambial_age = seq_len(longest)))
-  detrended <- trlboku:::detrend_given_rc(iadf, rc, po, method = method)
+  detrended <- detrend_given_rc(iadf, rc, po, method = method)
   tmp <- rowMeans(detrended, na.rm = TRUE)
   out <- data.frame(year = as.numeric(names(tmp)), index = as.vector(tmp))
   return(out)
@@ -325,7 +324,7 @@ campelo_freq <- function(iadf, rwl, n = 20){
       tidyr::gather("series","iadf", -.data$year) %>%
       dplyr::filter(!is.na(.data$iadf))
 
-    rwl_tidy <- trlboku::tidy_rwl(rwl) %>%
+    rwl_tidy <- tidy_rwl(rwl) %>%
       dplyr::mutate(class = cut(.data$rwl, !!nclass))
 
     tmp <- dplyr::left_join(iadf_tidy, rwl_tidy, by = c("year", "series"))
@@ -362,7 +361,7 @@ campelo_freq <- function(iadf, rwl, n = 20){
       tidyr::gather_("series", 'iadf', dplyr::select_vars_(names(.),names(.), exclude = "year")) %>%
       dplyr::filter_(lazyeval::interp(~(!is.na(nam)), nam = as.name('iadf')))
 
-    rwl_tidy <- trlboku::tidy_rwl(rwl) %>%
+    rwl_tidy <- tidy_rwl(rwl) %>%
       dplyr::mutate_(.dots = setNames(list(lazyeval::interp(~cut(r, n), r = as.name('rwl'))), 'class'))
 
     tmp <- dplyr::left_join(iadf_tidy, rwl_tidy, by = c("year", "series"))
@@ -440,6 +439,7 @@ campelo_chapman_find_start <- function(campelo_freq_object, min.n = 15, max_a = 
 #' @param min.n minimum number of samples within each group to be included in
 #'   model estimation
 #' @param start set custom start values - default to \code{list(a = 0.8, b = 0.03, c = 12.5)}
+#' @param max.iter maximum iterations for internally used \code{\link[stats]{nls}}
 #' @param make.plot logical
 #' @param ... additional plotting arguments
 #' @return a model object of class "nls"
@@ -471,7 +471,7 @@ campelo_chapman <- function(campelo_freq_object, min.n = 15, start = NULL,
   if(is.null(start)) {start <- list(a = 0.8, b = 0.03, c = 12.5)}
 
   try({
-    chapm <- nls(freq ~ a * (1 - exp(-b * ring_width))^c, start = start,
+    chapm <- stats::nls(freq ~ a * (1 - exp(-b * ring_width))^c, start = start,
                  control = list(maxiter = max.iter))
 
     if(make.plot){
@@ -536,7 +536,7 @@ campelo_index <- function(iadf, rwl, model){
       tidyr::gather("series", 'iadf', -.data$year) %>%
       dplyr::filter(!is.na(.data$iadf))
 
-    rwl_tidy <- trlboku::tidy_rwl(rwl)
+    rwl_tidy <- tidy_rwl(rwl)
 
     tmp <- dplyr::left_join(iadf_tidy, rwl_tidy, by = c("year", "series")) %>%
       dplyr::mutate(prediction = stats::predict(model, newdata = list(ring_width = .data$rwl)))%>%
@@ -574,7 +574,7 @@ campelo_index <- function(iadf, rwl, model){
       tidyr::gather_("series", 'iadf', dplyr::select_vars_(names(.),names(.), exclude = "year")) %>%
       dplyr::filter_(lazyeval::interp(~(!is.na(nam)), nam = as.name('iadf')))
 
-    rwl_tidy <- trlboku::tidy_rwl(rwl)
+    rwl_tidy <- tidy_rwl(rwl)
 
     tmp <- dplyr::left_join(iadf_tidy, rwl_tidy, by = c("year", "series")) %>%
       dplyr::mutate_(.dots = setNames(list(
