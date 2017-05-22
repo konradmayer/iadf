@@ -11,8 +11,8 @@ novak_index(iadf, model, po = NULL, method = "difference")
 and years as rownames where years with IADF are marked binary with 1,
 those without with 0, years not covered by the series are set to NA.}
 
-\item{model}{a model, output of either  \code{\link[iadfboku]{novak_weibull}}
-or \code{\link[iadfboku]{novak_negexp}}}
+\item{model}{a model, output of either  \code{\link[iadf]{novak_weibull}}
+or \code{\link[iadf]{novak_negexp}}}
 
 \item{po}{an optional data frame of pith offsets with series names in the
 first and pith offsets in the second column}

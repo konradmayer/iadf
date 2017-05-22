@@ -110,6 +110,7 @@ novak_freq <- function(iadf, po = NULL){
   freq <- rowMeans(aligned, na.rm = TRUE)
   n <- rowSums(!is.na(aligned))
   out <- data.frame(cambial.age = seq_along(freq), freq = freq, sample.depth = n)
+  class(out) <- c('data.frame', 'novak.freq')
   return(out)
 }
 
@@ -119,7 +120,7 @@ novak_freq <- function(iadf, po = NULL){
 #' @description Find good start values manually in case \code{\link{novak_weibull}}
 #'   returns an error caused by insufficient default starting values
 #' @param novak_freq_object A novak_freq_object as obtained from
-#'   \code{\link[iadfboku]{novak_freq}}
+#'   \code{\link[iadf]{novak_freq}}
 #' @param min.n minimum number of samples within each cambial age to be included in
 #'   model estimation
 #' @param max_a maximum value of manipulate slider for parameter a
@@ -166,7 +167,7 @@ novak_weibull_find_start <- function(novak_freq_object, min.n = 15, max_a = 10, 
 #' @description This function fits a Weibull function for the calculation of
 #'   age corrected IADF frequencies according to Novak et al. (2013)
 #' @param novak_freq_object A novak_freq_object as obtained from
-#'   \code{\link[iadfboku]{novak_freq}}
+#'   \code{\link[iadf]{novak_freq}}
 #' @param min.n minimum number of samples within each cambial age to be included in
 #'   model estimation
 #' @param start set custom start values - default to \code{list(a = 4, b = 0.33, c = 15.5)}
@@ -185,7 +186,11 @@ novak_weibull_find_start <- function(novak_freq_object, min.n = 15, max_a = 10, 
 #' data('example_iadf')
 #' model <- novak_negexp(novak_freq(example_iadf), 15)
 #' novak_index(example_iadf, model)
-novak_weibull <- function(novak_freq_object, min.n, start = NULL, make.plot = TRUE, ...){
+novak_weibull <- function(novak_freq_object, min.n = 15, start = NULL, make.plot = TRUE, ...){
+
+  if(!any(class(novak_freq_object) == 'novak.freq')) {
+    stop('input must be derived from novak_freq()')
+  }
 
   tmp <- novak_freq_object[novak_freq_object[['sample.depth']] >= min.n &
                              rowSums(is.na(novak_freq_object)) < 3, ]
@@ -217,7 +222,7 @@ novak_weibull <- function(novak_freq_object, min.n, start = NULL, make.plot = TR
 #' @description Find good start values manually in case \code{\link{novak_negexp}}
 #'   returns an error caused by insufficient default starting values
 #' @param novak_freq_object A novak_freq_object as obtained from
-#'   \code{\link[iadfboku]{novak_freq}}
+#'   \code{\link[iadf]{novak_freq}}
 #' @param min.n minimum number of samples within each cambial age to be included in
 #'   model estimation
 #' @param max_a maximum value of manipulate slider for parameter a
@@ -272,7 +277,7 @@ novak_negexp_find_start <- function(novak_freq_object, min.n = 15, max_a = 1, ma
 #'   to the Weibull function suggested by Novak et al. (2013) for calculation of
 #'   age corrected IADF frequencies
 #' @param novak_freq_object A novak_freq_object as obtained from
-#'   \code{\link[iadfboku]{novak_freq}}
+#'   \code{\link[iadf]{novak_freq}}
 #' @param min.n minimum number of samples within each cambial age to be included in
 #'   model estimation
 #' @param start set custom start values - default to \code{list(a = 0.01, b=1, c=1)}
@@ -291,7 +296,11 @@ novak_negexp_find_start <- function(novak_freq_object, min.n = 15, max_a = 1, ma
 #' data('example_iadf')
 #' model <- novak_negexp(novak_freq(example_iadf), 15)
 #' novak_index(example_iadf, model)
-novak_negexp <- function(novak_freq_object, min.n, start = NULL, make.plot = TRUE, ...){
+novak_negexp <- function(novak_freq_object, min.n = 15, start = NULL, make.plot = TRUE, ...){
+
+  if(!any(class(novak_freq_object) == 'novak.freq')) {
+    stop('input must be derived from novak_freq()')
+  }
 
   tmp <- novak_freq_object[novak_freq_object[['sample.depth']] >= min.n &
                              rowSums(is.na(novak_freq_object)) < 3, ]
@@ -325,8 +334,8 @@ novak_negexp <- function(novak_freq_object, min.n, start = NULL, make.plot = TRU
 #' @param iadf A data frame with numeric columns representing individual series
 #'   and years as rownames where years with IADF are marked binary with 1,
 #'   those without with 0, years not covered by the series are set to NA.
-#' @param model a model, output of either  \code{\link[iadfboku]{novak_weibull}}
-#'   or \code{\link[iadfboku]{novak_negexp}}
+#' @param model a model, output of either  \code{\link[iadf]{novak_weibull}}
+#'   or \code{\link[iadf]{novak_negexp}}
 #' @return a data frame
 #' @param po an optional data frame of pith offsets with series names in the
 #'   first and pith offsets in the second column
@@ -469,6 +478,7 @@ campelo_freq <- function(iadf, rwl, n = 20){
     out <- data.frame(class = names(freq), freq = as.vector(freq),
                       class.mean.rwl = as.vector(class_mean),
                       sample.depth = as.vector(sample_depth))
+    class(out) <- c('data.frame', 'campelo.freq')
     return(out)
   }
 }
@@ -478,7 +488,7 @@ campelo_freq <- function(iadf, rwl, n = 20){
 #' @description Find good start values manually in case \code{\link{campelo_chapman}}
 #'   returns an error caused by insufficient default starting values
 #' @param campelo_freq_object a campelo frequency object,
-#' output of \code{\link[iadfboku]{campelo_freq}}
+#' output of \code{\link[iadf]{campelo_freq}}
 #' @param min.n minimum number of samples within each group to be included in
 #'   model estimation
 #' @param max_a maximum value of manipulate slider for parameter a
@@ -531,7 +541,7 @@ campelo_chapman_find_start <- function(campelo_freq_object, min.n = 15, max_a = 
 #' @description Chapman model fitting to size classes for the calculation of
 #' size corrected IADF frequencies according to Campelo et al. (2015)
 #' @param campelo_freq_object a campelo frequency object,
-#' output of \code{\link[iadfboku]{campelo_freq}}
+#' output of \code{\link[iadf]{campelo_freq}}
 #' @param min.n minimum number of samples within each group to be included in
 #'   model estimation
 #' @param start set custom start values - default to \code{list(a = 0.8, b = 0.03, c = 12.5)}
@@ -552,6 +562,10 @@ campelo_chapman_find_start <- function(campelo_freq_object, min.n = 15, max_a = 
 #' campelo_index(example_iadf, example_rwl, model)
 campelo_chapman <- function(campelo_freq_object, min.n = 15, start = NULL,
                             make.plot = TRUE, ...){
+
+  if(!any(class(campelo_freq_object) == 'campelo.freq')) {
+    stop('input must be derived from campelo_freq()')
+  }
 
   tmp <- campelo_freq_object[campelo_freq_object[['sample.depth']] >= min.n &
                                rowSums(is.na(campelo_freq_object)) < 3, ]
@@ -587,7 +601,7 @@ campelo_chapman <- function(campelo_freq_object, min.n = 15, start = NULL,
 #'   and years as rownames where years with IADF are marked binary with 1,
 #'   those without with 0, years not covered by the series are set to NA.
 #' @param rwl a rwl/data.frame object
-#' @param model a chapman model, output of \code{\link[iadfboku]{campelo_chapman}}
+#' @param model a chapman model, output of \code{\link[iadf]{campelo_chapman}}
 #' @return a data frame
 #' @export
 #' @seealso \code{\link{campelo_freq}}, \code{\link{campelo_chapman}}

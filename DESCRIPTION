@@ -4,8 +4,8 @@ Title: Analysis of Intra Annual Density Fluctuations
 Version: 0.0.0.9000
 Authors@R: person("Konrad", "Mayer", email = "konrad.mayer@boku.ac.at",
   role = c("aut", "cre"))
-Description: The package holds functions to calculate false ring proportions 
-  from data frames of intra annual density fluctuations.
+Description: calculate false ring proportions from data frames of intra annual 
+  density fluctuations.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
@@ -21,5 +21,6 @@ Suggests: lazyeval,
     testthat,
     knitr,
     rmarkdown
+Remotes: konradmayer/trlboku
 RoxygenNote: 6.0.1
 VignetteBuilder: knitr

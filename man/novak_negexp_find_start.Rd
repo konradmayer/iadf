@@ -9,7 +9,7 @@ novak_negexp_find_start(novak_freq_object, min.n = 15, max_a = 1,
 }
 \arguments{
 \item{novak_freq_object}{A novak_freq_object as obtained from
-\code{\link[iadfboku]{novak_freq}}}
+\code{\link[iadf]{novak_freq}}}
 
 \item{min.n}{minimum number of samples within each cambial age to be included in
 model estimation}

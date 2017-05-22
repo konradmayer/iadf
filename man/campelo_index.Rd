@@ -13,7 +13,7 @@ those without with 0, years not covered by the series are set to NA.}
 
 \item{rwl}{a rwl/data.frame object}
 
-\item{model}{a chapman model, output of \code{\link[iadfboku]{campelo_chapman}}}
+\item{model}{a chapman model, output of \code{\link[iadf]{campelo_chapman}}}
 }
 \value{
 a data frame

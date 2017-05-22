@@ -9,7 +9,7 @@ campelo_chapman(campelo_freq_object, min.n = 15, start = NULL,
 }
 \arguments{
 \item{campelo_freq_object}{a campelo frequency object,
-output of \code{\link[iadfboku]{campelo_freq}}}
+output of \code{\link[iadf]{campelo_freq}}}
 
 \item{min.n}{minimum number of samples within each group to be included in
 model estimation}
