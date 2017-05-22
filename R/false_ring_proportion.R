@@ -93,7 +93,7 @@ afrp <- function(iadf) {
 novak_freq <- function(iadf, po = NULL){
 
   if(!is.data.frame(iadf) && !is.matrix(iadf)) {
-    stop('x has to be a data.frame or matrix')
+    stop('iadf has to be a data.frame or matrix')
   }
 
   if(!is.null(po)) {

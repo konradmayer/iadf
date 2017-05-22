@@ -11,10 +11,10 @@ test_that('novak_freq behaves as expected', {
  })
 
 test_that('novak_freq handles wrong input', {
-  expect_that(novak_freq(NA), throws_error("x has to be a data.frame or matrix"))
-  expect_that(novak_freq(NULL), throws_error("x has to be a data.frame or matrix"))
-  expect_that(novak_freq(1:3), throws_error("x has to be a data.frame or matrix"))
-  expect_that(novak_freq(as.factor(1:3)), throws_error("x has to be a data.frame or matrix"))
+  expect_that(novak_freq(NA), throws_error("iadf has to be a data.frame or matrix"))
+  expect_that(novak_freq(NULL), throws_error("iadf has to be a data.frame or matrix"))
+  expect_that(novak_freq(1:3), throws_error("iadf has to be a data.frame or matrix"))
+  expect_that(novak_freq(as.factor(1:3)), throws_error("iadf has to be a data.frame or matrix"))
 })
 
 
