@@ -18,22 +18,6 @@ test_that('novak_freq handles wrong input', {
 })
 
 
-
-context('novak negexp')
-
-test_that('novak_negexp behaves as expected', {
-  expect_that(class(novak_negexp(novak_freq(example_iadf), 15, make.plot = FALSE)),
-              equals("nls"))
-})
-
-test_that('novak_negexp handles wrong input', {
-  expect_that(novak_negexp(NA), throws_error("input must be derived from novak_freq()"))
-  expect_that(novak_negexp(NULL), throws_error("input must be derived from novak_freq()"))
-  expect_that(novak_negexp(1:3), throws_error("input must be derived from novak_freq()"))
-  expect_that(novak_negexp(as.factor(1:3)), throws_error("input must be derived from novak_freq()"))
-})
-
-
 context('novak weibull')
 
 test_that('novak_weibull behaves as expected', {

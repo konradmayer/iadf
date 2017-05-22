@@ -219,117 +219,6 @@ novak_weibull <- function(novak_freq_object, min.n = 15, start = NULL,
   })
 }
 
-# novak negexp find start values ----------------------------------------------
-#' @title novak_negexp_find_start
-#' @description Find good start values manually in case \code{\link{novak_negexp}}
-#'   returns an error caused by insufficient default starting values
-#' @param novak_freq_object A novak_freq_object as obtained from
-#'   \code{\link[iadf]{novak_freq}}
-#' @param min.n minimum number of samples within each cambial age to be included in
-#'   model estimation
-#' @param max_a maximum value of manipulate slider for parameter a
-#' @param max_b maximum value of manipulate slider for parameter b
-#' @param max_c maximum value of manipulate slider for parameter c
-#'
-#' @return a list which can be used as input argument 'start' in \code{\link{novak_weibull}}
-#' @export
-
-novak_negexp_find_start <- function(novak_freq_object, min.n = 15, max_a = 1, max_b = 3, max_c = 3) {
-
-  tmp <- novak_freq_object[novak_freq_object[['sample.depth']] >= min.n &
-                             rowSums(is.na(novak_freq_object)) < 3, ]
-
-  cambial_age <- tmp[['cambial.age']]
-  freq <- tmp[['freq']]
-
-  start <- list(a = max_a/2, b = max_b/2, c = max_c/2)
-  observe <- FALSE
-
-  a0 <- c(); b0 <- c(); c0 <- c(); x <- c(); return_value <- c()
-
-  manipulate::manipulate(
-    {
-      plot(novak_freq_object[['freq']] ~ novak_freq_object[['cambial.age']],
-           pch = 16, col = ifelse(novak_freq_object[['sample.depth']] >= min.n,
-                                  'black', 'gray80'),
-           xlab = 'cambial age', ylab = 'frequency')
-      a <- a0;  b <- b0;  c <- c0
-      curve(a + b * exp(-c*x), add=TRUE)
-      start <<- list(a=a, b=b, c=c)
-      if(return_value) {
-        observe <<- TRUE
-      }
-    },
-    a0 = manipulate::slider(0, max_a, step=0.0001, initial = start$a),
-    b0 = manipulate::slider(0, max_b, step=0.0001, initial = start$b),
-    c0 = manipulate::slider(0, max_c, step=0.0001, initial = start$c),
-    return_value = manipulate::button('Return value')
-  )
-
-  repeat{
-    if(observe){
-      return(start)
-    }
-  }
-}
-
-# novak_negexp -----------------------------------------------------------------
-#' @title novak_negexp
-#' @description This function fits a negative exponential function as an alternative
-#'   to the Weibull function suggested by Novak et al. (2013) for calculation of
-#'   age corrected IADF frequencies
-#' @param novak_freq_object A novak_freq_object as obtained from
-#'   \code{\link[iadf]{novak_freq}}
-#' @param min.n minimum number of samples within each cambial age to be included in
-#'   model estimation
-#' @param start set custom start values - default to \code{list(a = 0.01, b=1, c=1)}
-#' @param make.plot logical
-#' @param ... additional plotting arguments
-#' @references
-#'   Novak, Klemen and Sánchez, Miguel Angel Saz and Čufar, Katarina and Raventós,
-#'   Josep and de Luis, Martin, te and intra-annual density fluctuations in in Spain,
-#'   IAWA Journal, 34, 459-474 (2013), DOI:https://doi.org/10.1163/22941932-00000037
-#'   \url{http://booksandjournals.brillonline.com/content/journals/10.1163/22941932-00000037}.
-#' @return a model object of class "nls"
-#' @export
-#' @seealso \code{\link{novak_freq}}, \code{\link{novak_weibull}},
-#'   \code{\link{novak_index}}
-#' @examples
-#' data('example_iadf')
-#' model <- novak_negexp(novak_freq(example_iadf), 15)
-#' novak_index(example_iadf, model)
-novak_negexp <- function(novak_freq_object, min.n = 15, start = NULL,
-                         max.iter = 500, make.plot = TRUE, ...){
-
-  if(!any(class(novak_freq_object) == 'novak.freq')) {
-    stop('input must be derived from novak_freq()')
-  }
-
-  tmp <- novak_freq_object[novak_freq_object[['sample.depth']] >= min.n &
-                             rowSums(is.na(novak_freq_object)) < 3, ]
-
-  cambial_age <- tmp[['cambial.age']]
-  freq <- tmp[['freq']]
-
-  if(is.null(start)) {start <- list(a = 0.01, b=1, c=1)}
-
-  try({
-    wbu <- nls(freq ~ a + b * exp(-c*cambial_age), start = start,
-               control = list(maxiter = max.iter))
-
-    if(make.plot){
-      ndata <- data.frame(cambial_age = seq(0, max(cambial_age, na.rm = TRUE), by = 0.1))
-      wpred <- predict(wbu, newdata = ndata)
-      plot(novak_freq_object[['freq']] ~ novak_freq_object[['cambial.age']],
-           pch = 16, col = ifelse(novak_freq_object[['sample.depth']] >= min.n,
-                                  'black', 'gray80'),
-           xlab = 'cambial age', ylab = 'frequency', ...)
-      lines(ndata$cambial_age, wpred, col = 'red')
-    }
-
-    return(wbu)
-  })
-}
 
 # novak_index ------------------------------------------------------------------
 #' @title novak_index
@@ -447,6 +336,8 @@ campelo_freq <- function(iadf, rwl, n = 20){
                 class.mean.rwl = mean(.data$rwl, na.rm = TRUE),
                 sample.depth = length(.data$iadf)) %>%
       as.data.frame
+
+    class(out) <- c('data.frame', 'campelo.freq')
 
     return(out)
 

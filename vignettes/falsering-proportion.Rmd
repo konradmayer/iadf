@@ -24,7 +24,7 @@ explained in this vignette.
 
 # Data
 The data used in this vignette is included in the package. You can load the
-data-sets called "example_rwl" and "example_iadf" by typing:
+data-sets called `example_rwl` and `example_iadf` by typing:
 
 ```{r}
 library("iadf")
@@ -32,7 +32,7 @@ data("example_rwl")
 data("example_iadf")
 ```
 
-example_rwl is a data frame, similar to the rwl class defined by the package 
+`example_rwl` is a data frame, similar to the class `rwl` defined by the package 
 `dplR` with series as columns and years as rows, rownames specifying the year.
 The data shows the ring width with years not covered by the sample marked with 
 `NA`.
@@ -41,7 +41,7 @@ The data shows the ring width with years not covered by the sample marked with
 knitr::kable(example_rwl[20:30, 10:16])
 ```
 
-example_iadf has the same dimensions as example_rwl, just showing binary
+`example_iadf` has the same dimensions as `example_rwl`, just showing binary
 assignements of iadfs instead of ring width.
 
 ```{r, echo=FALSE, results='asis'}
@@ -52,8 +52,7 @@ knitr::kable(example_iadf[20:30, 10:16])
 # False-ring proportions
 
 ## Naive approach
-The proportion of rings showing an iadf can easily be calculated using base R 
-functions:
+The proportion of rings showing an iadf can easily be calculated using  base R:
 
 ```{r, results='hide'}
 rowMeans(example_iadf, na.rm = TRUE)
@@ -64,7 +63,7 @@ ring proportion with data frame output consistent to the other package functions
 and improved warning messages. 
 
 ```{r, results='hide'}
-(results_frp <- frp(example_iadf))
+results_frp <- frp(example_iadf)
 ```
 
 Please mention that this function is somehow slower 
@@ -76,7 +75,7 @@ As the variance of time series is dependend on sample size the variance can be
 adjusted according to Osborn [-@Osborn1997], using the function `afrp()`:
 
 ```{r, results='hide'}
-(results_afrp <- afrp(example_iadf))
+results_afrp <- afrp(example_iadf)
 ```
 
 ## Consideration of age trend 
@@ -89,46 +88,32 @@ frq <- novak_freq(example_iadf)
 ```
 
 Then we try to model the influence of age on iadf frequency using a Weibull
-function as suggested by Novak [-@Novak2013], limiting the data pairs used to
-only frequencies at cambial ages calculated from at least 15 years:
-
-```{r, error=TRUE, warning=TRUE}
-mdl <- novak_weibull(frq, 15)
-```
-Which results in an error. This can either be due to insufficient starting values 
-for the curve fitting function (which can be solved using
-`novak_negexp_find_start()` or `novak_weibull_find_start()` and will be discussed
-in the next section) or due to a wrong curve 
-type. Regardless the suggestion of Novak [-@Novak2013] to fit a Weibull function,
-we found negative exponential curves fit much better to our data (maybe because
-of differences in iadf formation due to the different climatic regime as 
-Novak [-@Novak2013] uses data from mediterranean sites while the presented data
-comes from temperate climate)
-
-Therefore we can use
+function as suggested by Novak [-@Novak2013], limiting the data pairs used 
+to cambial ages representing at least 15 years:
 
 ```{r, fig.width=7}
-mdl <- novak_negexp(frq, 15)
+mdl <- novak_weibull(frq, 15)
 ```
 
-to fit the curve. Currently there are only functions for fitting Weibull and 
-negative exponential curves available in the package. If other curve types fit
-your data better, please contact the package maintainer to include this type as
-well.
+If you encounter an error its likely due to insufficient starting values 
+for the curve fitting function (which can be found using
+`novak_weibull_find_start()` and will be discussed for
+`campelo_chapman_find_start()`in the next section).
 
-Next we hand the model and the original data to the function `novak_index()`:
+Next we hand the model and the original data to the function `novak_index()` to
+calculate the iadf proportion with age trend removed:
 ```{r, results='hide'}
 results_novak <- novak_index(example_iadf, mdl)
 ```
 
-to calculate the iadf proportion with age trend removed.
+
 
 ## Consideration of the influence of ring width 
-Campelo [-@Campelo2014] states that beneath ring age also ring with influences
+Campelo [-@Campelo2014] states that beneath ring age also ring width influences
 iadf formation and introduced another standardization approach.
 
-The workflow is almost the same as for the approach above. Fist we calculate 
-frequencies per ring width class using both data sets:
+The workflow implemented in `iadf` is almost the same as for the approach above.
+Fist we calculate frequencies per ring width class using both data sets:
 
 ```{r}
 frq <- campelo_freq(example_iadf, example_rwl)
@@ -163,7 +148,7 @@ plot(NULL, xlim = range(as.numeric(rownames(example_iadf))),
 lines(results_frp, col = 'blue')
 lines(results_afrp, col = 'green')
 lines(results_novak, col = 'purple')
-lines(results_campelo, col = 'red')
+lines(results_campelo[ , c(1,3)], col = 'red')
 legend('topright', col = c('blue', 'green', 'purple', 'red'), 
        legend = c('frp', 'afrp', 'Novak', 'Campelo'), bty = 'n', lty = 1)
 ```

@@ -5,7 +5,7 @@
 \title{campelo_chapman}
 \usage{
 campelo_chapman(campelo_freq_object, min.n = 15, start = NULL,
-  make.plot = TRUE, ...)
+  make.plot = TRUE, max.iter = 500, ...)
 }
 \arguments{
 \item{campelo_freq_object}{a campelo frequency object,
