@@ -369,7 +369,7 @@ campelo_freq <- function(iadf, rwl, n = 20){
     freq <- tapply(tmp[['iadf']], tmp[['class']], function(y) mean(y, na.rm = TRUE))
     class_mean <- tapply(tmp[['rwl']], tmp[['class']], function(y) mean(y, na.rm = TRUE))
     sample_depth <- tapply(tmp[['iadf']], tmp[['class']], function(y) length(na.omit(y)))
-    out <- data.frame(class = names(freq), freq = as.vector(freq),
+    out <- data.frame(class = as.factor(names(freq)), freq = as.vector(freq),
                       class.mean.rwl = as.vector(class_mean),
                       sample.depth = as.vector(sample_depth))
     class(out) <- c('data.frame', 'campelo.freq')

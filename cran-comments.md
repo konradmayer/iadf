@@ -5,7 +5,6 @@
 
 ## R CMD check results
 
-
 There was 1 NOTE on win-builder:
 
 * checking CRAN incoming feasibility ... NOTE
