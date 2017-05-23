@@ -10,7 +10,7 @@ If you know any further methods which should get included or find any bugs or mi
 Installation
 ------------
 
-`iadf` is available soon available on CRAN and currently available on GitHub:
+`iadf` is soon available on CRAN and currently available on GitHub:
 
 To install the stable CRAN version:
 

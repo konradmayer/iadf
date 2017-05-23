@@ -8,12 +8,13 @@
 There was 1 NOTE on win-builder:
 
 * checking CRAN incoming feasibility ... NOTE
-  Maintainer: 'Konrad Mayer <konrad.mayer@boku.ac.at>'
+Maintainer: 'Konrad Mayer <konrad.mayer@boku.ac.at>'
 
-  New submission
+New submission
 
-  Possibly mis-spelled words in DESCRIPTION:
-    intra (3:20, 7:67)
-
-  the word "intra" is correctly used there.
+Possibly mis-spelled words in DESCRIPTION:
+  Intra (3:20)
+  intra (8:67)
+  
+  the word "intra" resp "Intra" is correctly used there.
   

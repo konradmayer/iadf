@@ -20,7 +20,7 @@ If you know any further methods which should get included or find any bugs or
 mistakes in the code, please contact the package maintainer or file an issue. 
 
 ## Installation
-`iadf` is available soon available on CRAN and currently available on GitHub:
+`iadf` is soon available on CRAN and currently available on GitHub:
 
 To install the stable CRAN version:
 ```{r CRAN-installation, eval = FALSE}
