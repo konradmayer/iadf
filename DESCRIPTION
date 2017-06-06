@@ -1,7 +1,7 @@
 Package: iadf
 Type: Package
 Title: Analysis of Intra Annual Density Fluctuations
-Version: 0.0.1
+Version: 0.1.0
 Authors@R: c(person("Konrad", "Mayer", email = "konrad.mayer@boku.ac.at",
   role = c("aut", "cre")),
   person("Filipe", "Campelo", role = "aut"))
