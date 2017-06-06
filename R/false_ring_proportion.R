@@ -2,7 +2,7 @@ globalVariables(".")
 
 #frp----------------------------------------------------------------------------
 #' @title false ring proportion
-#' @description Calculate the false fing proportion of a set of
+#' @description Calculate the false ring proportion of a set of
 #'   binary false ring assignments.
 #' @param iadf A data frame with numeric columns representing individual series
 #'   and years as rownames where years with IADF are marked binary with 1,
@@ -33,7 +33,7 @@ frp <- function(iadf) {
 
 #afrp---------------------------------------------------------------------------
 #' @title adjusted false ring proportion
-#' @description Calculate the adjusted false fing proportion, as
+#' @description Calculate the adjusted false ring proportion, as
 #'   suggested by Osborn et. al. (1997), of a set of binary false ring assignments.
 #' @param iadf A data frame with numeric columns representing individual series
 #'   and years as rownames where years with IADF are marked with 1,
@@ -232,7 +232,7 @@ novak_weibull <- function(novak_freq_object, min.n = 15, start = NULL,
 #' @return a data frame
 #' @param po an optional data frame of pith offsets with series names in the
 #'   first and pith offsets in the second column
-#' @param method method for the rcs detrending, 'quotient' or 'difference'
+#' @param method method for the RCS detrending, 'quotient' or 'difference'
 #' @references
 #'   Novak, Klemen and Sánchez, Miguel Angel Saz and Čufar, Katarina and Raventós,
 #'   Josep and de Luis, Martin, te and intra-annual density fluctuations in in Spain,

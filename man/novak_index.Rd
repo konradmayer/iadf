@@ -16,7 +16,7 @@ those without with 0, years not covered by the series are set to NA.}
 \item{po}{an optional data frame of pith offsets with series names in the
 first and pith offsets in the second column}
 
-\item{method}{method for the rcs detrending, 'quotient' or 'difference'}
+\item{method}{method for the RCS detrending, 'quotient' or 'difference'}
 }
 \value{
 a data frame

@@ -15,7 +15,7 @@ those without with 0, years not covered by the series are set to NA.}
 a data frame
 }
 \description{
-Calculate the adjusted false fing proportion, as
+Calculate the adjusted false ring proportion, as
   suggested by Osborn et. al. (1997), of a set of binary false ring assignments.
 }
 \references{

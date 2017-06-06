@@ -70,11 +70,9 @@ series_length <- function(x) {
 
 #sort_by_index------------------------------------------------------------------
 #' @title sort_by_index
-#' @description internal function sortByIndex from package dplR, shifts
+#' @description internal function such as sortByIndex as in package dplR, shifts
 #'   series to start with index 1, maintaining the same vector length by
-#'   adding NA values to the end. Code copied and not imported to make function
-#'   name consistent to naming convention in package trlboku and to provide
-#'   documentation.
+#'   adding NA values to the end.
 #' @param x a numeric vector, representing an individual rwl series,
 #'   potentially containing NA values.
 #' @return a numeric vector with the same length as x.

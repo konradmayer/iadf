@@ -14,11 +14,9 @@ potentially containing NA values.}
 a numeric vector with the same length as x.
 }
 \description{
-internal function sortByIndex from package dplR, shifts
+internal function such as sortByIndex as in package dplR, shifts
   series to start with index 1, maintaining the same vector length by
-  adding NA values to the end. Code copied and not imported to make function
-  name consistent to naming convention in package trlboku and to provide
-  documentation.
+  adding NA values to the end.
 }
 \examples{
 x <- c(NA,NA,NA,1,2,3,4,5, NA, NA)
