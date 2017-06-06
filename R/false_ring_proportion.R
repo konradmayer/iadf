@@ -302,7 +302,7 @@ novak_index <- function(iadf, model, po = NULL, method = 'difference'){
 #' campelo_index(example_iadf, example_rwl, model)
 campelo_freq <- function(iadf, rwl, n = 20){
 
-  nclass <- rlang::quo(n)
+
 
   if (utils::packageVersion("dplyr") > "0.5.0") {
     if(!is.data.frame(iadf)) {
@@ -316,6 +316,8 @@ campelo_freq <- function(iadf, rwl, n = 20){
     if(!all(as.matrix(iadf) %in% c(0, 1, NA))) {
       stop('iadf must only contain 0, 1, and NA values')
     }
+
+    nclass <- rlang::quo(n)
 
     iadf_tidy <- iadf %>%
       tibble::rownames_to_column('year') %>%
@@ -369,7 +371,8 @@ campelo_freq <- function(iadf, rwl, n = 20){
     freq <- tapply(tmp[['iadf']], tmp[['class']], function(y) mean(y, na.rm = TRUE))
     class_mean <- tapply(tmp[['rwl']], tmp[['class']], function(y) mean(y, na.rm = TRUE))
     sample_depth <- tapply(tmp[['iadf']], tmp[['class']], function(y) length(na.omit(y)))
-    out <- data.frame(class = as.factor(names(freq)), freq = as.vector(freq),
+    out <- data.frame(class = factor(names(freq), levels = names(freq)),
+                      freq = as.vector(freq),
                       class.mean.rwl = as.vector(class_mean),
                       sample.depth = as.vector(sample_depth))
     class(out) <- c('data.frame', 'campelo.freq')

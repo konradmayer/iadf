@@ -1,3 +1,10 @@
+## Resubmission
+This is a resubmission. In this version I have:
+* fixed the failing unit test
+* fixed two typos in the unit test file test-campelo.R
+
+
+
 ## Test environments
 * local x86_64, linux-gnu, R version 3.3.3 (2017-03-06)
 * Ubuntu Linux 16.04 LTS, R-release, GCC (rhub)
