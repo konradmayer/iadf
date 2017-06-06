@@ -26,8 +26,8 @@ model estimation}
 a model object of class "nls"
 }
 \description{
-This function fits a Weibull function for the calculation of
-  age corrected IADF frequencies according to Novak et al. (2013)
+Fit a Weibull function for the calculation of
+  age corrected IADF frequencies according to Novak et al. (2013).
 }
 \examples{
 data('example_iadf')

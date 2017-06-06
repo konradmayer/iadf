@@ -25,5 +25,5 @@ a list which can be used as input argument 'start' in \code{\link{novak_weibull}
 }
 \description{
 Find good start values manually in case \code{\link{novak_weibull}}
-  returns an error caused by insufficient default starting values
+  returns an error caused by insufficient default starting values.
 }

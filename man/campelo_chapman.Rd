@@ -27,7 +27,7 @@ a model object of class "nls"
 }
 \description{
 Chapman model fitting to size classes for the calculation of
-size corrected IADF frequencies according to Campelo et al. (2015)
+size corrected IADF frequencies according to Campelo et al. (2015).
 }
 \examples{
 data('example_iadf')

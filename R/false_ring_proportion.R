@@ -2,8 +2,8 @@ globalVariables(".")
 
 #frp----------------------------------------------------------------------------
 #' @title false ring proportion
-#' @description This function calulates the false fing proportion of a set of
-#'   binary false ring assignments
+#' @description Calculate the false fing proportion of a set of
+#'   binary false ring assignments.
 #' @param iadf A data frame with numeric columns representing individual series
 #'   and years as rownames where years with IADF are marked binary with 1,
 #'   those without with 0, years not covered by the series are set to NA.
@@ -33,8 +33,8 @@ frp <- function(iadf) {
 
 #afrp---------------------------------------------------------------------------
 #' @title adjusted false ring proportion
-#' @description This function calulates the adjusted false fing proportion, as
-#'   suggested by Osborn et. al. (1997), of a set of binary false ring assignments
+#' @description Calculate the adjusted false fing proportion, as
+#'   suggested by Osborn et. al. (1997), of a set of binary false ring assignments.
 #' @param iadf A data frame with numeric columns representing individual series
 #'   and years as rownames where years with IADF are marked with 1,
 #'   those without with 0, years not covered by the series are set to NA.
@@ -69,8 +69,8 @@ afrp <- function(iadf) {
 
 # novak_freq -------------------------------------------------------------------
 #' @title iadf frequency per cambial age
-#' @description This function returns the frequency per cambial age as suggested
-#'  by Novak et al. (2013)
+#' @description Calculate the frequency per cambial age as suggested
+#'  by Novak et al. (2013).
 #' @param iadf A data frame with numeric columns representing individual series
 #'   and years as rownames where years with IADF are marked binary with 1,
 #'   those without with 0, years not covered by the series are set to NA.
@@ -118,7 +118,7 @@ novak_freq <- function(iadf, po = NULL){
 # novak weibull find start values ----------------------------------------------
 #' @title novak_weibull_find_start
 #' @description Find good start values manually in case \code{\link{novak_weibull}}
-#'   returns an error caused by insufficient default starting values
+#'   returns an error caused by insufficient default starting values.
 #' @param novak_freq_object A novak_freq_object as obtained from
 #'   \code{\link[iadf]{novak_freq}}
 #' @param min.n minimum number of samples within each cambial age to be included in
@@ -164,8 +164,8 @@ novak_weibull_find_start <- function(novak_freq_object, min.n = 15, max_a = 10, 
 
 # novak_weibull ----------------------------------------------------------------
 #' @title novak_weibull
-#' @description This function fits a Weibull function for the calculation of
-#'   age corrected IADF frequencies according to Novak et al. (2013)
+#' @description Fit a Weibull function for the calculation of
+#'   age corrected IADF frequencies according to Novak et al. (2013).
 #' @param novak_freq_object A novak_freq_object as obtained from
 #'   \code{\link[iadf]{novak_freq}}
 #' @param min.n minimum number of samples within each cambial age to be included in
@@ -224,7 +224,7 @@ novak_weibull <- function(novak_freq_object, min.n = 15, start = NULL,
 # novak_index ------------------------------------------------------------------
 #' @title novak_index
 #' @description  Calculation of age corrected IADF frequencies according
-#'   to Novak et al. (2013)
+#'   to Novak et al. (2013).
 #' @param iadf A data frame with numeric columns representing individual series
 #'   and years as rownames where years with IADF are marked binary with 1,
 #'   those without with 0, years not covered by the series are set to NA.
@@ -277,8 +277,8 @@ novak_index <- function(iadf, model, po = NULL, method = 'difference'){
 
 # campelo_freq -----------------------------------------------------------------
 #' @title iadf frequency per ring width class
-#' @description This function returns the frequency per ring width class as suggested
-#'  by Campelo (2015)
+#' @description Calculate the frequency per ring width class as suggested
+#'  by Campelo (2015).
 #' @param iadf A data frame with numeric columns representing individual series
 #'   and years as rownames where years with IADF are marked binary with 1,
 #'   those without with 0, years not covered by the series are set to NA.
@@ -380,7 +380,7 @@ campelo_freq <- function(iadf, rwl, n = 20){
 # campelo chapman find start values --------------------------------------------
 #' @title campelo_chapman_find_start
 #' @description Find good start values manually in case \code{\link{campelo_chapman}}
-#'   returns an error caused by insufficient default starting values
+#'   returns an error caused by insufficient default starting values.
 #' @param campelo_freq_object a campelo frequency object,
 #' output of \code{\link[iadf]{campelo_freq}}
 #' @param min.n minimum number of samples within each group to be included in
@@ -433,7 +433,7 @@ campelo_chapman_find_start <- function(campelo_freq_object, min.n = 15, max_a = 
 # campelo_chapman --------------------------------------------------------------
 #' @title campelo_chapman
 #' @description Chapman model fitting to size classes for the calculation of
-#' size corrected IADF frequencies according to Campelo et al. (2015)
+#' size corrected IADF frequencies according to Campelo et al. (2015).
 #' @param campelo_freq_object a campelo frequency object,
 #' output of \code{\link[iadf]{campelo_freq}}
 #' @param min.n minimum number of samples within each group to be included in

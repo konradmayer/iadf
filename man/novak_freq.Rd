@@ -18,8 +18,8 @@ pith offset as number of rings in the second column}
 a data frame
 }
 \description{
-This function returns the frequency per cambial age as suggested
- by Novak et al. (2013)
+Calculate the frequency per cambial age as suggested
+ by Novak et al. (2013).
 }
 \examples{
 data('example_iadf')

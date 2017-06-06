@@ -23,7 +23,7 @@ a data frame
 }
 \description{
 Calculation of age corrected IADF frequencies according
-  to Novak et al. (2013)
+  to Novak et al. (2013).
 }
 \examples{
 data('example_iadf')

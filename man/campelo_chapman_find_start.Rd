@@ -25,5 +25,5 @@ a list which can be used as input argument 'start' in \code{\link{campelo_chapma
 }
 \description{
 Find good start values manually in case \code{\link{campelo_chapman}}
-  returns an error caused by insufficient default starting values
+  returns an error caused by insufficient default starting values.
 }

@@ -20,8 +20,8 @@ series in columns}
 a data frame
 }
 \description{
-This function returns the frequency per ring width class as suggested
- by Campelo (2015)
+Calculate the frequency per ring width class as suggested
+ by Campelo (2015).
 }
 \examples{
 data('example_iadf')

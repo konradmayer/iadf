@@ -15,8 +15,8 @@ those without with 0, years not covered by the series are set to NA.}
 a data frame
 }
 \description{
-This function calulates the false fing proportion of a set of
-  binary false ring assignments
+Calculate the false fing proportion of a set of
+  binary false ring assignments.
 }
 \seealso{
 \code{\link{afrp}}
