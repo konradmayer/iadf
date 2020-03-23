@@ -19,7 +19,7 @@ globalVariables(".")
 #' @rdname tidyrwl
 #' @export
 tidy_crn <- function(crn) {
-  dplyr::bind_cols(tibble::tibble_(list(year = ~as.numeric(rownames(crn)))), crn)
+  crn %>% tibble::rownames_to_column(var = 'year')
 }
 
 #' @rdname tidyrwl
@@ -36,17 +36,22 @@ tidy_rwl <- function(rwl, value_col = 'rwl') {
   rwl %>%
     tibble::rownames_to_column('year') %>%
     tibble::as_tibble() %>%
-    dplyr::mutate_(.dots = setNames(list(lazyeval::interp(~as.numeric(var), var = as.name('year'))), 'year')) %>%
-    tidyr::gather_("series", value_col, dplyr::select_vars_(names(.),names(.), exclude = "year")) %>%
-    dplyr::filter_(lazyeval::interp(~(!is.na(nam)), nam = as.name('rwl')))
+    dplyr::mutate(year = as.numeric(.data$year)) %>%
+    tidyr::pivot_longer(cols = -.data$year, names_to = 'series',
+                        values_to = value_col, values_drop_na = TRUE) %>%
+    dplyr::arrange(.data$series)
 }
 
 #' @rdname tidyrwl
 #' @export
 untidy_rwl <- function(tidy_rwl, value_col = 'rwl') {
-  tidy_rwl %>%
-    tidyr::spread_("series", value_col) %>%
+  out <- tidy_rwl %>%
+    tidyr::pivot_wider(names_from = "series",
+                       values_from = tidyselect::all_of(value_col)) %>%
     tibble::remove_rownames() %>%
     as.data.frame() %>%
-    tibble::column_to_rownames('year')
+    tibble::column_to_rownames('year') %>%
+    .[order(as.numeric(row.names(.))), ]
+  class(out) <- c("rwl", "data.frame")
+  out
 }

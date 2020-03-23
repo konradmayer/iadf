@@ -4,8 +4,8 @@
 \alias{novak_weibull}
 \title{novak_weibull}
 \usage{
-novak_weibull(novak_freq_object, min.n = 15, start = NULL, max.iter = 500,
-  make.plot = TRUE, ...)
+novak_weibull(novak_freq_object, min.n = 15, start = NULL,
+  max.iter = 500, make.plot = TRUE, ...)
 }
 \arguments{
 \item{novak_freq_object}{A novak_freq_object as obtained from
