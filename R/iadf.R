@@ -1,6 +1,7 @@
 #' iadf
 #'
-#' calculate false ring proportions from data frames of intra annual density fluctuations
+#' calculate false ring proportions from data frames of intra annual
+#' density fluctuations
 #'
 #' @docType package
 #' @name iadf

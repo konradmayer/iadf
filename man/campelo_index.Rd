@@ -30,8 +30,8 @@ campelo_index(example_iadf, example_rwl, model)
 }
 \references{
 Campelo, F., Vieira, J., Battipaglia, G. et al. Which matters most for the
-  formation of intra-annual density fluctuations in Pinus pinaster: age or size?
-  Trees (2015) 29: 237. doi:10.1007/s00468-014-1108-9
+  formation of intra-annual density fluctuations in Pinus pinaster: age or
+  size? Trees (2015) 29: 237. doi:10.1007/s00468-014-1108-9
   \url{http://link.springer.com/article/10.1007/s00468-014-1108-9}.
 }
 \seealso{

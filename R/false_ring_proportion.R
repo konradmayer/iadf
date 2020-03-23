@@ -12,18 +12,20 @@ globalVariables(".")
 #' @export
 frp <- function(iadf) {
 
-  if(!is.data.frame(iadf) && !is.matrix(iadf)) {
-    stop('x has to be a data.frame or matrix')
+  if (!is.data.frame(iadf) && !is.matrix(iadf)) {
+    stop("x has to be a data.frame or matrix")
   }
 
-  if(!all(as.matrix(iadf) %in% c(0, 1, NA))) {
-    stop('the data frame must only contain 0, 1, and NA values')
+  if (!all(as.matrix(iadf) %in% c(0, 1, NA))) {
+    stop("the data frame must only contain 0, 1, and NA values")
   }
 
-  n <- ncol(iadf)-rowSums(is.na(iadf), na.rm = TRUE)
+  n <- ncol(iadf) - rowSums(is.na(iadf), na.rm = TRUE)
 
-  if(any(n == 0)){warning('there are no trees in year: ',
-                          paste(names(n[n == 0]), collapse = ', '))}
+  if (any(n == 0)) {
+    warning("there are no trees in year: ",
+            paste(names(n[n == 0]), collapse = ", "))
+  }
 
   iadfp <- rowMeans(iadf, na.rm = TRUE)
 
@@ -31,10 +33,11 @@ frp <- function(iadf) {
   return(out)
 }
 
-#afrp---------------------------------------------------------------------------
+# afrp  ------------------------------------------------------------------------
 #' @title adjusted false ring proportion
 #' @description Calculate the adjusted false ring proportion, as
-#'   suggested by Osborn et. al. (1997), of a set of binary false ring assignments.
+#'   suggested by Osborn et. al. (1997), of a set of binary false ring
+#'   assignments.
 #' @param iadf A data frame with numeric columns representing individual series
 #'   and years as rownames where years with IADF are marked with 1,
 #'   those without with 0, years not covered by the series are set to NA.
@@ -46,18 +49,20 @@ frp <- function(iadf) {
 #' @export
 afrp <- function(iadf) {
 
-  if(!is.data.frame(iadf) && !is.matrix(iadf)) {
-    stop('x has to be a data.frame or matrix')
+  if (!is.data.frame(iadf) && !is.matrix(iadf)) {
+    stop("x has to be a data.frame or matrix")
   }
 
-  if(!all(as.matrix(iadf) %in% c(0, 1, NA))) {
-    stop('the data frame must only contain 0, 1, and NA values')
+  if (!all(as.matrix(iadf) %in% c(0, 1, NA))) {
+    stop("the data frame must only contain 0, 1, and NA values")
   }
 
-  n <- ncol(iadf)-rowSums(is.na(iadf), na.rm = TRUE)
+  n <- ncol(iadf) - rowSums(is.na(iadf), na.rm = TRUE)
 
-  if(any(n == 0)){warning('there are no trees in year: ',
-                          paste(names(n[n == 0]), collapse = ', '))}
+  if (any(n == 0)){
+    warning("there are no trees in year: ",
+            paste(names(n[n == 0]), collapse = ", "))
+  }
 
   iadfp <- rowMeans(iadf, na.rm = TRUE)
 
@@ -77,9 +82,10 @@ afrp <- function(iadf) {
 #' @param po a data frame with pith offsets with series names in the first and
 #'   pith offset as number of rings in the second column
 #' @references
-#'   Novak, Klemen and Sánchez, Miguel Angel Saz and Čufar, Katarina and Raventós,
-#'   Josep and de Luis, Martin, te and intra-annual density fluctuations in in Spain,
-#'   IAWA Journal, 34, 459-474 (2013), DOI:https://doi.org/10.1163/22941932-00000037
+#'   Novak, Klemen and Sánchez, Miguel Angel Saz and Čufar, Katarina and
+#'   Raventós, Josep and de Luis, Martin, te and intra-annual density
+#'   fluctuations in in Spain, IAWA Journal, 34, 459-474 (2013),
+#'   DOI:https://doi.org/10.1163/22941932-00000037
 #'   \url{http://booksandjournals.brillonline.com/content/journals/10.1163/22941932-00000037}.
 #' @return a data frame
 #' @export
@@ -92,71 +98,74 @@ afrp <- function(iadf) {
 
 novak_freq <- function(iadf, po = NULL){
 
-  if(!is.data.frame(iadf) && !is.matrix(iadf)) {
-    stop('iadf has to be a data.frame or matrix')
+  if (!is.data.frame(iadf) && !is.matrix(iadf)) {
+    stop("iadf has to be a data.frame or matrix")
   }
 
-  if(!is.null(po)) {
-    if(!is.data.frame(po) || ncol(po) != 2) {
-      stop('po has to be a data.frame with ncol == 2')
+  if (!is.null(po)) {
+    if (!is.data.frame(po) || ncol(po) != 2) {
+      stop("po has to be a data.frame with ncol == 2")
     }
   }
 
-  if(!all(as.matrix(iadf) %in% c(0, 1, NA))) {
-    stop('iadf must only contain 0, 1, and NA values')
+  if (!all(as.matrix(iadf) %in% c(0, 1, NA))) {
+    stop("iadf must only contain 0, 1, and NA values")
   }
 
   aligned <- to_cambial_age(iadf, po)
   freq <- rowMeans(aligned, na.rm = TRUE)
   n <- rowSums(!is.na(aligned))
-  out <- data.frame(cambial.age = seq_along(freq), freq = freq, sample.depth = n)
-  class(out) <- c('data.frame', 'novak.freq')
+  out <- data.frame(cambial.age = seq_along(freq), freq = freq,
+                    sample.depth = n)
+  class(out) <- c("data.frame", "novak.freq")
   return(out)
 }
 
 
 # novak weibull find start values ----------------------------------------------
 #' @title novak_weibull_find_start
-#' @description Find good start values manually in case \code{\link{novak_weibull}}
+#' @description Find good start values manually in case
+#' \code{\link{novak_weibull}}
 #'   returns an error caused by insufficient default starting values.
 #' @param novak_freq_object A novak_freq_object as obtained from
 #'   \code{\link[iadf]{novak_freq}}
-#' @param min.n minimum number of samples within each cambial age to be included in
-#'   model estimation
+#' @param min.n minimum number of samples within each cambial age to be included
+#' in model estimation
 #' @param max_a maximum value of manipulate slider for parameter a
 #' @param max_b maximum value of manipulate slider for parameter b
 #' @param max_c maximum value of manipulate slider for parameter c
 #'
-#' @return a list which can be used as input argument 'start' in \code{\link{novak_weibull}}
+#' @return a list which can be used as input argument 'start' in
+#' \code{\link{novak_weibull}}
 #' @export
 
-novak_weibull_find_start <- function(novak_freq_object, min.n = 15, max_a = 10, max_b = 3, max_c = 30) {
+novak_weibull_find_start <- function(novak_freq_object, min.n = 15, max_a = 10,
+                                     max_b = 3, max_c = 30) {
   start <- list(a = 4, b = 0.33, c = 15.5)
   observe <- FALSE
 
   a0 <- c(); b0 <- c(); c0 <- c(); x <- c(); return_value <- c()
 
-  manipulate::manipulate(
-    {
-      plot(novak_freq_object[['freq']] ~ novak_freq_object[['cambial.age']],
-           pch = 16, col = ifelse(novak_freq_object[['sample.depth']] >= min.n,
-                                  'black', 'gray80'),
-           xlab = 'cambial age', ylab = 'frequency')
-      a <- a0;  b <- b0;  c <- c0
-      curve(a*b*c*x^2*exp(-a*x^b), add=TRUE)
-      start <<- list(a=a, b=b, c=c)
-      if(return_value) {
-        observe <<- TRUE
-      }
-    },
-    a0 = manipulate::slider(0, max_a, step=0.0001, initial = start$a),
-    b0 = manipulate::slider(0, max_b, step=0.0001, initial = start$b),
-    c0 = manipulate::slider(0, max_c, step=0.0001, initial = start$c),
-    return_value = manipulate::button('Return value')
+  manipulate::manipulate({
+    plot(novak_freq_object[["freq"]] ~ novak_freq_object[["cambial.age"]],
+         pch = 16, col = ifelse(novak_freq_object[["sample.depth"]] >= min.n,
+                                "black", "gray80"),
+         xlab = "cambial age", ylab = "frequency")
+    a <- a0;  b <- b0;  c <- c0
+    curve(a * b * c * x^2 * exp(-a * x^b), add = TRUE)
+    start <<- list(a = a, b = b, c = c)
+    if (return_value) {
+      observe <<- TRUE
+    }
+  },
+  a0 = manipulate::slider(0, max_a, step = 0.0001, initial = start$a),
+  b0 = manipulate::slider(0, max_b, step = 0.0001, initial = start$b),
+  c0 = manipulate::slider(0, max_c, step = 0.0001, initial = start$c),
+  return_value = manipulate::button("Return value")
   )
 
   repeat{
-    if(observe){
+    if (observe) {
       return(start)
     }
   }
@@ -168,16 +177,19 @@ novak_weibull_find_start <- function(novak_freq_object, min.n = 15, max_a = 10, 
 #'   age corrected IADF frequencies according to Novak et al. (2013).
 #' @param novak_freq_object A novak_freq_object as obtained from
 #'   \code{\link[iadf]{novak_freq}}
-#' @param min.n minimum number of samples within each cambial age to be included in
-#'   model estimation
-#' @param start set custom start values - default to \code{list(a = 4, b = 0.33, c = 15.5)}
-#' @param max.iter maximum iterations for internally used \code{\link[stats]{nls}}
+#' @param min.n minimum number of samples within each cambial age to be included
+#' in model estimation
+#' @param start set custom start values - default to
+#' \code{list(a = 4, b = 0.33, c = 15.5)}
+#' @param max.iter maximum iterations for internally used
+#' \code{\link[stats]{nls}}
 #' @param make.plot logical
 #' @param ... additional plotting arguments
 #' @references
-#'   Novak, Klemen and Sánchez, Miguel Angel Saz and Čufar, Katarina and Raventós,
-#'   Josep and de Luis, Martin, te and intra-annual density fluctuations in in Spain,
-#'   IAWA Journal, 34, 459-474 (2013), DOI:https://doi.org/10.1163/22941932-00000037
+#'   Novak, Klemen and Sánchez, Miguel Angel Saz and Čufar, Katarina and
+#'   Raventós, Josep and de Luis, Martin, te and intra-annual density
+#'   fluctuations in in Spain, IAWA Journal, 34, 459-474 (2013),
+#'   DOI:https://doi.org/10.1163/22941932-00000037
 #'   \url{http://booksandjournals.brillonline.com/content/journals/10.1163/22941932-00000037}.
 #' @return a model object of class "nls"
 #' @export
@@ -188,32 +200,35 @@ novak_weibull_find_start <- function(novak_freq_object, min.n = 15, max_a = 10, 
 #' model <- novak_weibull(novak_freq(example_iadf), 15)
 #' novak_index(example_iadf, model)
 novak_weibull <- function(novak_freq_object, min.n = 15, start = NULL,
-                          max.iter = 500, make.plot = TRUE, ...){
+                          max.iter = 500, make.plot = TRUE, ...) {
 
-  if(!any(class(novak_freq_object) == 'novak.freq')) {
-    stop('input must be derived from novak_freq()')
+  if (!any(class(novak_freq_object) == "novak.freq")) {
+    stop("input must be derived from novak_freq()")
   }
 
-  tmp <- novak_freq_object[novak_freq_object[['sample.depth']] >= min.n &
+  tmp <- novak_freq_object[novak_freq_object[["sample.depth"]] >= min.n &
                              rowSums(is.na(novak_freq_object)) < 3, ]
 
-  cambial_age <- tmp[['cambial.age']]
-  freq <- tmp[['freq']]
+  cambial_age <- tmp[["cambial.age"]]
+  freq <- tmp[["freq"]]
 
-  if(is.null(start)) {start <- list(a = 4, b = 0.33, c = 15.5)}
+  if (is.null(start)) {
+    start <- list(a = 4, b = 0.33, c = 15.5)
+  }
 
   try({
-    wbu <- stats::nls(freq ~ a*b*c*cambial_age^2*exp(-a*cambial_age^b), start = start,
-               control = list(maxiter = max.iter))
+    wbu <- stats::nls(freq ~ a * b * c * cambial_age^2 * exp(-a * cambial_age^b),
+                      start = start, control = list(maxiter = max.iter))
 
-    if(make.plot){
-      ndata <- data.frame(cambial_age = seq(0, max(cambial_age, na.rm = TRUE), by = 0.1))
+    if (make.plot) {
+      ndata <- data.frame(cambial_age = seq(0, max(cambial_age, na.rm = TRUE),
+                                            by = 0.1))
       wpred <- predict(wbu, newdata = ndata)
-      plot(novak_freq_object[['freq']] ~ novak_freq_object[['cambial.age']],
-           pch = 16, col = ifelse(novak_freq_object[['sample.depth']] >= min.n,
-                                  'black', 'gray80'),
-           xlab = 'cambial age', ylab = 'frequency', ...)
-      lines(ndata$cambial_age, wpred, col = 'red')
+      plot(novak_freq_object[["freq"]] ~ novak_freq_object[["cambial.age"]],
+           pch = 16, col = ifelse(novak_freq_object[["sample.depth"]] >= min.n,
+                                  "black", "gray80"),
+           xlab = "cambial age", ylab = "frequency", ...)
+      lines(ndata$cambial_age, wpred, col = "red")
     }
 
     return(wbu)
@@ -234,9 +249,10 @@ novak_weibull <- function(novak_freq_object, min.n = 15, start = NULL,
 #'   first and pith offsets in the second column
 #' @param method method for the RCS detrending, 'quotient' or 'difference'
 #' @references
-#'   Novak, Klemen and Sánchez, Miguel Angel Saz and Čufar, Katarina and Raventós,
-#'   Josep and de Luis, Martin, te and intra-annual density fluctuations in in Spain,
-#'   IAWA Journal, 34, 459-474 (2013), DOI:https://doi.org/10.1163/22941932-00000037
+#'   Novak, Klemen and Sánchez, Miguel Angel Saz and Čufar, Katarina and
+#'   Raventós, Josep and de Luis, Martin, te and intra-annual density
+#'   fluctuations in in Spain, IAWA Journal, 34, 459-474 (2013),
+#'   DOI:https://doi.org/10.1163/22941932-00000037
 #'   \url{http://booksandjournals.brillonline.com/content/journals/10.1163/22941932-00000037}.
 #' @export
 #' @seealso \code{\link{novak_freq}}, \code{\link{novak_weibull}}
@@ -244,29 +260,29 @@ novak_weibull <- function(novak_freq_object, min.n = 15, start = NULL,
 #' data('example_iadf')
 #' model <- novak_weibull(novak_freq(example_iadf), 15)
 #' novak_index(example_iadf, model)
-novak_index <- function(iadf, model, po = NULL, method = 'difference'){
+novak_index <- function(iadf, model, po = NULL, method = "difference"){
 
   if (is.null(po)) {
     po <- data.frame(series = names(iadf), po = 1)
   }
 
-  if(!method %in% c('quotient', 'difference')) {
+  if (!method %in% c("quotient", "difference")) {
     stop("please choose either 'quotient' or 'difference' as method")
   }
 
-  if(!is.data.frame(iadf)) {
-    stop('iadf must be of class data.frame')
+  if (!is.data.frame(iadf)) {
+    stop("iadf must be of class data.frame")
   }
 
-  if(!(is.data.frame(po))) {
-    stop('po must be of class data.frame')
+  if (!(is.data.frame(po))) {
+    stop("po must be of class data.frame")
   }
 
-  if(!setequal(po[ , 1], names(iadf))) {
-    stop('series names in po are not the same as provided in iadf')
+  if (!setequal(po[, 1], names(iadf))) {
+    stop("series names in po are not the same as provided in iadf")
   }
 
-  longest <- max(series_length(iadf) + po[,2])
+  longest <- max(series_length(iadf) + po[, 2])
   rc <- stats::predict(model, newdata = list(cambial_age = seq_len(longest)))
   detrended <- detrend_given_rc(iadf, rc, po, method = method)
   tmp <- rowMeans(detrended, na.rm = TRUE)
@@ -288,8 +304,8 @@ novak_index <- function(iadf, model, po = NULL, method = 'difference'){
 #' @return a data frame
 #' @references
 #'   Campelo, F., Vieira, J., Battipaglia, G. et al. Which matters most for the
-#'   formation of intra-annual density fluctuations in Pinus pinaster: age or size?
-#'   Trees (2015) 29: 237. doi:10.1007/s00468-014-1108-9
+#'   formation of intra-annual density fluctuations in Pinus pinaster: age or
+#'   size? Trees (2015) 29: 237. doi:10.1007/s00468-014-1108-9
 #'   \url{http://link.springer.com/article/10.1007/s00468-014-1108-9}.
 #' @export
 #' @seealso  \code{\link{campelo_chapman}}, \code{\link{campelo_index}}
@@ -301,29 +317,26 @@ novak_index <- function(iadf, model, po = NULL, method = 'difference'){
 #' model <- campelo_chapman(campelo_freq(example_iadf, example_rwl))
 #' campelo_index(example_iadf, example_rwl, model)
 campelo_freq <- function(iadf, rwl, n = 20){
-
-
-
   if (utils::packageVersion("dplyr") > "0.5.0") {
-    if(!is.data.frame(iadf)) {
-      stop('iadf has to be a data.frame')
+    if (!is.data.frame(iadf)) {
+      stop("iadf has to be a data.frame")
     }
 
-    if(!is.data.frame(rwl)) {
-      stop('rwl has to be a data.frame')
+    if (!is.data.frame(rwl)) {
+      stop("rwl has to be a data.frame")
     }
 
-    if(!all(as.matrix(iadf) %in% c(0, 1, NA))) {
-      stop('iadf must only contain 0, 1, and NA values')
+    if (!all(as.matrix(iadf) %in% c(0, 1, NA))) {
+      stop("iadf must only contain 0, 1, and NA values")
     }
 
     nclass <- rlang::quo(n)
 
     iadf_tidy <- iadf %>%
-      tibble::rownames_to_column('year') %>%
+      tibble::rownames_to_column("year") %>%
       tibble::as_tibble() %>%
       dplyr::mutate(year = as.integer(.data$year)) %>%
-      tidyr::gather("series","iadf", -.data$year) %>%
+      tidyr::gather("series", "iadf", -.data$year) %>%
       dplyr::filter(!is.na(.data$iadf))
 
     rwl_tidy <- tidy_rwl(rwl) %>%
@@ -334,55 +347,65 @@ campelo_freq <- function(iadf, rwl, n = 20){
     out <- tmp %>%
       dplyr::group_by(.data$class) %>%
       dplyr::summarise(freq = mean(.data$iadf, na.rm = TRUE),
-                class.mean.rwl = mean(.data$rwl, na.rm = TRUE),
-                sample.depth = length(.data$iadf)) %>%
+                       class.mean.rwl = mean(.data$rwl, na.rm = TRUE),
+                       sample.depth = length(.data$iadf)) %>%
       as.data.frame
 
-    class(out) <- c('data.frame', 'campelo.freq')
+    class(out) <- c("data.frame", "campelo.freq")
 
     return(out)
 
-  } else { #keep code for dplyr < 0.6 for backwards compatibility
+  } else {# keep code for dplyr < 0.6 for backwards compatibility
 
-    if(!is.data.frame(iadf)) {
-      stop('iadf has to be a data.frame')
+    if (!is.data.frame(iadf)) {
+      stop("iadf has to be a data.frame")
     }
 
-    if(!is.data.frame(rwl)) {
-      stop('rwl has to be a data.frame')
+    if (!is.data.frame(rwl)) {
+      stop("rwl has to be a data.frame")
     }
 
-    if(!all(as.matrix(iadf) %in% c(0, 1, NA))) {
-      stop('iadf must only contain 0, 1, and NA values')
+    if (!all(as.matrix(iadf) %in% c(0, 1, NA))) {
+      stop("iadf must only contain 0, 1, and NA values")
     }
 
     iadf_tidy <- iadf %>%
-      tibble::rownames_to_column('year') %>%
+      tibble::rownames_to_column("year") %>%
       tibble::as_tibble() %>%
-      dplyr::mutate_(.dots = setNames(list(lazyeval::interp(~as.numeric(var), var = as.name('year'))), 'year')) %>%
-      tidyr::gather_("series", 'iadf', dplyr::select_vars_(names(.),names(.), exclude = "year")) %>%
-      dplyr::filter_(lazyeval::interp(~(!is.na(nam)), nam = as.name('iadf')))
+      dplyr::mutate_(.dots = setNames(
+        list(lazyeval::interp(~as.numeric(var),
+                              var = as.name("year"))), "year")) %>%
+      tidyr::gather_("series", "iadf",
+                     dplyr::select_vars_(names(.), names(.),
+                                         exclude = "year")) %>%
+      dplyr::filter_(lazyeval::interp(~(!is.na(nam)), nam = as.name("iadf")))
 
     rwl_tidy <- tidy_rwl(rwl) %>%
-      dplyr::mutate_(.dots = setNames(list(lazyeval::interp(~cut(r, n), r = as.name('rwl'))), 'class'))
+      dplyr::mutate_(.dots = setNames(
+        list(lazyeval::interp(~cut(r, n),
+                              r = as.name("rwl"))), "class"))
 
     tmp <- dplyr::left_join(iadf_tidy, rwl_tidy, by = c("year", "series"))
 
-    freq <- tapply(tmp[['iadf']], tmp[['class']], function(y) mean(y, na.rm = TRUE))
-    class_mean <- tapply(tmp[['rwl']], tmp[['class']], function(y) mean(y, na.rm = TRUE))
-    sample_depth <- tapply(tmp[['iadf']], tmp[['class']], function(y) length(na.omit(y)))
+    freq <- tapply(tmp[["iadf"]], tmp[["class"]],
+                   function(y) mean(y, na.rm = TRUE))
+    class_mean <- tapply(tmp[["rwl"]], tmp[["class"]],
+                         function(y) mean(y, na.rm = TRUE))
+    sample_depth <- tapply(tmp[["iadf"]], tmp[["class"]],
+                           function(y) length(na.omit(y)))
     out <- data.frame(class = factor(names(freq), levels = names(freq)),
                       freq = as.vector(freq),
                       class.mean.rwl = as.vector(class_mean),
                       sample.depth = as.vector(sample_depth))
-    class(out) <- c('data.frame', 'campelo.freq')
+    class(out) <- c("data.frame", "campelo.freq")
     return(out)
   }
 }
 
 # campelo chapman find start values --------------------------------------------
 #' @title campelo_chapman_find_start
-#' @description Find good start values manually in case \code{\link{campelo_chapman}}
+#' @description Find good start values manually in case
+#' \code{\link{campelo_chapman}}
 #'   returns an error caused by insufficient default starting values.
 #' @param campelo_freq_object a campelo frequency object,
 #' output of \code{\link[iadf]{campelo_freq}}
@@ -392,42 +415,43 @@ campelo_freq <- function(iadf, rwl, n = 20){
 #' @param max_b maximum value of manipulate slider for parameter b
 #' @param max_c maximum value of manipulate slider for parameter c
 #'
-#' @return a list which can be used as input argument 'start' in \code{\link{campelo_chapman}}
+#' @return a list which can be used as input argument 'start' in
+#' \code{\link{campelo_chapman}}
 #' @export
-campelo_chapman_find_start <- function(campelo_freq_object, min.n = 15, max_a = 3, max_b = 1, max_c = 17) {
+campelo_chapman_find_start <- function(campelo_freq_object, min.n = 15,
+                                       max_a = 3, max_b = 1, max_c = 17) {
 
-  tmp <- campelo_freq_object[campelo_freq_object[['sample.depth']] >= min.n &
+  tmp <- campelo_freq_object[campelo_freq_object[["sample.depth"]] >= min.n &
                                rowSums(is.na(campelo_freq_object)) < 3, ]
 
-  ring_width <- tmp[['class.mean.rwl']]
-  freq <- tmp[['freq']]
+  ring_width <- tmp[["class.mean.rwl"]]
+  freq <- tmp[["freq"]]
 
-  start <- list(a = max_a/2, b = max_b/2, c = max_c/2)
+  start <- list(a = max_a / 2, b = max_b / 2, c = max_c / 2)
   observe <- FALSE
 
   a0 <- c(); b0 <- c(); c0 <- c(); x <- c(); return_value <- c()
 
-  manipulate::manipulate(
-    {
-      plot(campelo_freq_object[['freq']] ~ campelo_freq_object[['class.mean.rwl']],
-           pch = 16, col = ifelse(campelo_freq_object[['sample.depth']] >= min.n,
-                                  'black', 'gray80'),
-           xlab = 'mean class ring width', ylab = 'frequency')
-      a <- a0;  b <- b0;  c <- c0
-      curve(a * (1 - exp(-b * x))^c, add=TRUE)
-      start <<- list(a=a, b=b, c=c)
-      if(return_value) {
-        observe <<- TRUE
-      }
-    },
-    a0 = manipulate::slider(0, max_a, step=0.0001, initial = start$a),
-    b0 = manipulate::slider(0, max_b, step=0.0001, initial = start$b),
-    c0 = manipulate::slider(0, max_c, step=0.0001, initial = start$c),
-    return_value = manipulate::button('Return value')
+  manipulate::manipulate({
+    plot(campelo_freq_object[["freq"]] ~ campelo_freq_object[["class.mean.rwl"]],
+         pch = 16, col = ifelse(campelo_freq_object[["sample.depth"]] >= min.n,
+                                "black", "gray80"),
+         xlab = "mean class ring width", ylab = "frequency")
+    a <- a0;  b <- b0;  c <- c0
+    curve(a * (1 - exp(-b * x))^c, add = TRUE)
+    start <<- list(a = a, b = b, c = c)
+    if (return_value) {
+      observe <<- TRUE
+    }
+  },
+  a0 = manipulate::slider(0, max_a, step = 0.0001, initial = start$a),
+  b0 = manipulate::slider(0, max_b, step = 0.0001, initial = start$b),
+  c0 = manipulate::slider(0, max_c, step = 0.0001, initial = start$c),
+  return_value = manipulate::button("Return value")
   )
 
   repeat{
-    if(observe){
+    if (observe){
       return(start)
     }
   }
@@ -441,8 +465,10 @@ campelo_chapman_find_start <- function(campelo_freq_object, min.n = 15, max_a = 
 #' output of \code{\link[iadf]{campelo_freq}}
 #' @param min.n minimum number of samples within each group to be included in
 #'   model estimation
-#' @param start set custom start values - default to \code{list(a = 0.8, b = 0.03, c = 12.5)}
-#' @param max.iter maximum iterations for internally used \code{\link[stats]{nls}}
+#' @param start set custom start values - default to
+#' \code{list(a = 0.8, b = 0.03, c = 12.5)}
+#' @param max.iter maximum iterations for internally used
+#' \code{\link[stats]{nls}}
 #' @param make.plot logical
 #' @param ... additional plotting arguments
 #' @return a model object of class "nls"
@@ -450,8 +476,8 @@ campelo_chapman_find_start <- function(campelo_freq_object, min.n = 15, max_a = 
 #' @seealso \code{\link{campelo_freq}}, \code{\link{campelo_index}}
 #' @references
 #'   Campelo, F., Vieira, J., Battipaglia, G. et al. Which matters most for the
-#'   formation of intra-annual density fluctuations in Pinus pinaster: age or size?
-#'   Trees (2015) 29: 237. doi:10.1007/s00468-014-1108-9
+#'   formation of intra-annual density fluctuations in Pinus pinaster: age or
+#'   size? Trees (2015) 29: 237. doi:10.1007/s00468-014-1108-9
 #'   \url{http://link.springer.com/article/10.1007/s00468-014-1108-9}.
 #' @examples
 #' data('example_iadf')
@@ -461,30 +487,33 @@ campelo_chapman_find_start <- function(campelo_freq_object, min.n = 15, max_a = 
 campelo_chapman <- function(campelo_freq_object, min.n = 15, start = NULL,
                             make.plot = TRUE, max.iter = 500, ...){
 
-  if(!any(class(campelo_freq_object) == 'campelo.freq')) {
-    stop('input must be derived from campelo_freq()')
+  if (!any(class(campelo_freq_object) == "campelo.freq")) {
+    stop("input must be derived from campelo_freq()")
   }
 
-  tmp <- campelo_freq_object[campelo_freq_object[['sample.depth']] >= min.n &
+  tmp <- campelo_freq_object[campelo_freq_object[["sample.depth"]] >= min.n &
                                rowSums(is.na(campelo_freq_object)) < 3, ]
 
-  ring_width <- tmp[['class.mean.rwl']]
-  freq <- tmp[['freq']]
+  ring_width <- tmp[["class.mean.rwl"]]
+  freq <- tmp[["freq"]]
 
-  if(is.null(start)) {start <- list(a = 0.8, b = 0.03, c = 12.5)}
+  if (is.null(start)) {
+    start <- list(a = 0.8, b = 0.03, c = 12.5)
+  }
 
   try({
     chapm <- stats::nls(freq ~ a * (1 - exp(-b * ring_width))^c, start = start,
-                 control = list(maxiter = max.iter))
+                        control = list(maxiter = max.iter))
 
-    if(make.plot){
-      ndata <- data.frame(ring_width = seq(0, max(ring_width, na.rm = TRUE), by = 0.1))
+    if (make.plot){
+      ndata <- data.frame(ring_width = seq(0, max(ring_width, na.rm = TRUE),
+                                           by = 0.1))
       cpred <- predict(chapm, newdata = ndata)
-      plot(campelo_freq_object[['freq']] ~ campelo_freq_object[['class.mean.rwl']],
-           pch = 16, col = ifelse(campelo_freq_object[['sample.depth']] >= min.n,
-                                  'black', 'gray80'),
-           xlab = 'mean class ring width', ylab = 'frequency', ...)
-      lines(ndata$ring_width, cpred, col = 'red')
+      plot(campelo_freq_object[["freq"]] ~ campelo_freq_object[["class.mean.rwl"]],
+           pch = 16, col = ifelse(campelo_freq_object[["sample.depth"]] >= min.n,
+                                  "black", "gray80"),
+           xlab = "mean class ring width", ylab = "frequency", ...)
+      lines(ndata$ring_width, cpred, col = "red")
     }
 
     return(chapm)
@@ -508,8 +537,8 @@ campelo_chapman <- function(campelo_freq_object, min.n = 15, start = NULL,
 #' @importFrom dplyr %>%
 #' @references
 #'   Campelo, F., Vieira, J., Battipaglia, G. et al. Which matters most for the
-#'   formation of intra-annual density fluctuations in Pinus pinaster: age or size?
-#'   Trees (2015) 29: 237. doi:10.1007/s00468-014-1108-9
+#'   formation of intra-annual density fluctuations in Pinus pinaster: age or
+#'   size? Trees (2015) 29: 237. doi:10.1007/s00468-014-1108-9
 #'   \url{http://link.springer.com/article/10.1007/s00468-014-1108-9}.
 #' @examples
 #' data('example_iadf')
@@ -520,83 +549,90 @@ campelo_index <- function(iadf, rwl, model){
 
   if (utils::packageVersion("dplyr") > "0.5.0") {
 
-    if(!is.data.frame(iadf)) {
-      stop('iadf has to be a data.frame')
+    if (!is.data.frame(iadf)) {
+      stop("iadf has to be a data.frame")
     }
 
-    if(!is.data.frame(rwl)) {
-      stop('rwl has to be a data.frame')
+    if (!is.data.frame(rwl)) {
+      stop("rwl has to be a data.frame")
     }
 
-    if(!all(as.matrix(iadf) %in% c(0, 1, NA))) {
-      stop('iadf must only contain 0, 1, and NA values')
+    if (!all(as.matrix(iadf) %in% c(0, 1, NA))) {
+      stop("iadf must only contain 0, 1, and NA values")
     }
 
     iadf_tidy <- iadf %>%
-      tibble::rownames_to_column('year') %>%
+      tibble::rownames_to_column("year") %>%
       tibble::as_tibble() %>%
       dplyr::mutate(year = as.numeric(.data$year)) %>%
-      tidyr::gather("series", 'iadf', -.data$year) %>%
+      tidyr::gather("series", "iadf", -.data$year) %>%
       dplyr::filter(!is.na(.data$iadf))
 
     rwl_tidy <- tidy_rwl(rwl)
 
     tmp <- dplyr::left_join(iadf_tidy, rwl_tidy, by = c("year", "series")) %>%
-      dplyr::mutate(prediction = stats::predict(model, newdata = list(ring_width = .data$rwl)))%>%
+      dplyr::mutate(prediction =
+                      stats::predict(model,
+                                     newdata = list(ring_width = .data$rwl))) %>%
       dplyr::mutate(index = .data$iadf - .data$prediction) %>%
-      dplyr::select('year', 'series' , 'index') %>%
-      tidyr::spread('series', 'index')
+      dplyr::select("year", "series", "index") %>%
+      tidyr::spread("series", "index")
 
-    mean_index <- cbind(tmp['year'], rowMeans(dplyr::select_(tmp, '-year'),
+    mean_index <- cbind(tmp["year"], rowMeans(dplyr::select_(tmp, "-year"),
                                               na.rm = TRUE))
-    names(mean_index) <- c('year', 'index')
+    names(mean_index) <- c("year", "index")
 
-    spline <- dplR::ffcsaps(mean_index[['index']])
-    detrend_index <- dplyr::mutate(mean_index, detrended_index = .data$index - spline)
+    spline <- dplR::ffcsaps(mean_index[["index"]])
+    detrend_index <- dplyr::mutate(mean_index,
+                                   detrended_index = .data$index - spline)
 
     return(detrend_index)
 
-  } else { #keep code for dplyr < 0.6 for backwards compatibility
+  } else {#keep code for dplyr < 0.6 for backwards compatibility
 
-    if(!is.data.frame(iadf)) {
-      stop('iadf has to be a data.frame')
+    if (!is.data.frame(iadf)) {
+      stop("iadf has to be a data.frame")
     }
 
-    if(!is.data.frame(rwl)) {
-      stop('rwl has to be a data.frame')
+    if (!is.data.frame(rwl)) {
+      stop("rwl has to be a data.frame")
     }
 
-    if(!all(as.matrix(iadf) %in% c(0, 1, NA))) {
-      stop('iadf must only contain 0, 1, and NA values')
+    if (!all(as.matrix(iadf) %in% c(0, 1, NA))) {
+      stop("iadf must only contain 0, 1, and NA values")
     }
 
     iadf_tidy <- iadf %>%
-      tibble::rownames_to_column('year') %>%
+      tibble::rownames_to_column("year") %>%
       tibble::as_tibble() %>%
-      dplyr::mutate_(.dots = setNames(list(lazyeval::interp(~as.numeric(var), var = as.name('year'))), 'year')) %>%
-      tidyr::gather_("series", 'iadf', dplyr::select_vars_(names(.),names(.), exclude = "year")) %>%
-      dplyr::filter_(lazyeval::interp(~(!is.na(nam)), nam = as.name('iadf')))
+      dplyr::mutate_(.dots = setNames(
+        list(lazyeval::interp(~as.numeric(var),
+                              var = as.name("year"))), "year")) %>%
+      tidyr::gather_("series", "iadf",
+                     dplyr::select_vars_(names(.), names(.),
+                                         exclude = "year")) %>%
+      dplyr::filter_(lazyeval::interp(~(!is.na(nam)), nam = as.name("iadf")))
 
     rwl_tidy <- tidy_rwl(rwl)
 
     tmp <- dplyr::left_join(iadf_tidy, rwl_tidy, by = c("year", "series")) %>%
       dplyr::mutate_(.dots = setNames(list(
-        lazyeval::interp(~predict(md, newdata = list(ring_width = .[['rwl']])),
-                         md = as.name('model'))), 'prediction')) %>%
+        lazyeval::interp(~predict(md, newdata = list(ring_width = .[["rwl"]])),
+                         md = as.name("model"))), "prediction")) %>%
       dplyr::mutate_(.dots = setNames(list(
-        lazyeval::interp(~ia - pr, ia = as.name('iadf'),
-                         pr = as.name('prediction'))), 'index')) %>%
-      dplyr::select_('year', 'series' , 'index') %>%
-      tidyr::spread_('series', 'index')
+        lazyeval::interp(~ia - pr, ia = as.name("iadf"),
+                         pr = as.name("prediction"))), "index")) %>%
+      dplyr::select_("year", "series", "index") %>%
+      tidyr::spread_("series", "index")
 
-    mean_index <- cbind(tmp['year'], rowMeans(dplyr::select_(tmp, '-year'),
+    mean_index <- cbind(tmp["year"], rowMeans(dplyr::select_(tmp, "-year"),
                                               na.rm = TRUE))
-    names(mean_index) <- c('year', 'index')
+    names(mean_index) <- c("year", "index")
 
-    spline <- dplR::ffcsaps(mean_index[['index']])
+    spline <- dplR::ffcsaps(mean_index[["index"]])
     detrend_index <- dplyr::mutate_(mean_index, .dots = setNames(list(
-      lazyeval::interp(~ i - s, i = as.name('index'), s = as.name('spline'))),
-      'detrended_index'))
+      lazyeval::interp(~ i - s, i = as.name("index"), s = as.name("spline"))),
+      "detrended_index"))
 
     return(detrend_index)
 

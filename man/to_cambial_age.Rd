@@ -16,8 +16,8 @@ data as nr. of years in the second column.}
 A data.frame with aligned series
 }
 \description{
-This function aligns tree ring series to match their cambial ages,
-  taking pith offset into account if provided.
+This function aligns tree ring series to match their cambial
+ages, taking pith offset into account if provided.
 }
 \examples{
 library("dplR")

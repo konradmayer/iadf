@@ -11,12 +11,14 @@ novak_weibull(novak_freq_object, min.n = 15, start = NULL,
 \item{novak_freq_object}{A novak_freq_object as obtained from
 \code{\link[iadf]{novak_freq}}}
 
-\item{min.n}{minimum number of samples within each cambial age to be included in
-model estimation}
+\item{min.n}{minimum number of samples within each cambial age to be included
+in model estimation}
 
-\item{start}{set custom start values - default to \code{list(a = 4, b = 0.33, c = 15.5)}}
+\item{start}{set custom start values - default to
+\code{list(a = 4, b = 0.33, c = 15.5)}}
 
-\item{max.iter}{maximum iterations for internally used \code{\link[stats]{nls}}}
+\item{max.iter}{maximum iterations for internally used
+\code{\link[stats]{nls}}}
 
 \item{make.plot}{logical}
 
@@ -35,9 +37,10 @@ model <- novak_weibull(novak_freq(example_iadf), 15)
 novak_index(example_iadf, model)
 }
 \references{
-Novak, Klemen and Sánchez, Miguel Angel Saz and Čufar, Katarina and Raventós,
-  Josep and de Luis, Martin, te and intra-annual density fluctuations in in Spain,
-  IAWA Journal, 34, 459-474 (2013), DOI:https://doi.org/10.1163/22941932-00000037
+Novak, Klemen and Sánchez, Miguel Angel Saz and Čufar, Katarina and
+  Raventós, Josep and de Luis, Martin, te and intra-annual density
+  fluctuations in in Spain, IAWA Journal, 34, 459-474 (2013),
+  DOI:https://doi.org/10.1163/22941932-00000037
   \url{http://booksandjournals.brillonline.com/content/journals/10.1163/22941932-00000037}.
 }
 \seealso{

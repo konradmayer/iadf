@@ -16,7 +16,8 @@ a data frame
 }
 \description{
 Calculate the adjusted false ring proportion, as
-  suggested by Osborn et. al. (1997), of a set of binary false ring assignments.
+  suggested by Osborn et. al. (1997), of a set of binary false ring
+  assignments.
 }
 \references{
 Osborn TJ, Briffa KR and Jones PD (1997) Adjusting variance for
