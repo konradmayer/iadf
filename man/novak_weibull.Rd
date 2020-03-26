@@ -4,8 +4,14 @@
 \alias{novak_weibull}
 \title{novak_weibull}
 \usage{
-novak_weibull(novak_freq_object, min.n = 15, start = NULL,
-  max.iter = 500, make.plot = TRUE, ...)
+novak_weibull(
+  novak_freq_object,
+  min.n = 15,
+  start = NULL,
+  max.iter = 500,
+  make.plot = TRUE,
+  ...
+)
 }
 \arguments{
 \item{novak_freq_object}{A novak_freq_object as obtained from
@@ -38,10 +44,9 @@ novak_index(example_iadf, model)
 }
 \references{
 Novak, Klemen and Sánchez, Miguel Angel Saz and Čufar, Katarina and
-  Raventós, Josep and de Luis, Martin, te and intra-annual density
+  Raventós, Josep and de Luis, Martin. Age, climate and intra-annual density
   fluctuations in in Spain, IAWA Journal, 34, 459-474 (2013),
-  DOI:https://doi.org/10.1163/22941932-00000037
-  \url{http://booksandjournals.brillonline.com/content/journals/10.1163/22941932-00000037}.
+  doi:10.1163/22941932-00000037
 }
 \seealso{
 \code{\link{novak_freq}},

@@ -4,8 +4,13 @@
 \alias{campelo_chapman_find_start}
 \title{campelo_chapman_find_start}
 \usage{
-campelo_chapman_find_start(campelo_freq_object, min.n = 15, max_a = 3,
-  max_b = 1, max_c = 17)
+campelo_chapman_find_start(
+  campelo_freq_object,
+  min.n = 15,
+  max_a = 3,
+  max_b = 1,
+  max_c = 17
+)
 }
 \arguments{
 \item{campelo_freq_object}{a campelo frequency object,

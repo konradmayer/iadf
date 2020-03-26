@@ -42,7 +42,7 @@ knitr::kable(example_rwl[20:30, 10:16])
 ```
 
 `example_iadf` has the same dimensions as `example_rwl`, just showing binary
-assignements of iadfs instead of ring width.
+assignments of iadfs instead of ring width.
 
 ```{r, echo=FALSE, results='asis'}
 knitr::kable(example_iadf[20:30, 10:16])
@@ -71,7 +71,7 @@ than using `rowMeans()`, so consider using the base R code whenever computation
 speed is critical.
 
 ## Consideration of sample size
-As the variance of time series is dependend on sample size the variance can be
+As the variance of time series is dependent on sample size the variance can be
 adjusted according to Osborn [-@Osborn1997], using the function `afrp()`:
 
 ```{r, results='hide'}
@@ -79,7 +79,7 @@ results_afrp <- afrp(example_iadf)
 ```
 
 ## Consideration of age trend 
-As other tree ring parameters, also IADF occurence shows an age trend. 
+As other tree ring parameters, also IADF occurrence shows an age trend. 
 Novak [-@Novak2013] suggested a detrending procedure to reduce this bias.
 
 First the iadf frequency per cambial age needs to be calculated:
@@ -140,7 +140,9 @@ Next the index is calculated using both data sets and the model:
 results_campelo <- campelo_index(example_iadf, example_rwl, mdl)
 ```
 
-#Comparison of the approaches
+
+
+# Comparison of the approaches
 
 ```{r, fig.width=7, fig.height=5}
 plot(NULL, xlim = range(as.numeric(rownames(example_iadf))), 
@@ -155,5 +157,5 @@ legend('topright', col = c('blue', 'green', 'purple', 'red'),
 
 
 
-#References
+# References
 

@@ -4,8 +4,14 @@
 \alias{campelo_chapman}
 \title{campelo_chapman}
 \usage{
-campelo_chapman(campelo_freq_object, min.n = 15, start = NULL,
-  make.plot = TRUE, max.iter = 500, ...)
+campelo_chapman(
+  campelo_freq_object,
+  min.n = 15,
+  start = NULL,
+  make.plot = TRUE,
+  max.iter = 500,
+  ...
+)
 }
 \arguments{
 \item{campelo_freq_object}{a campelo frequency object,
@@ -41,7 +47,6 @@ campelo_index(example_iadf, example_rwl, model)
 Campelo, F., Vieira, J., Battipaglia, G. et al. Which matters most for the
   formation of intra-annual density fluctuations in Pinus pinaster: age or
   size? Trees (2015) 29: 237. doi:10.1007/s00468-014-1108-9
-  \url{http://link.springer.com/article/10.1007/s00468-014-1108-9}.
 }
 \seealso{
 \code{\link{campelo_freq}}, \code{\link{campelo_index}}

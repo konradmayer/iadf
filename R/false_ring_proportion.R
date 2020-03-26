@@ -42,7 +42,7 @@ frp <- function(iadf) {
 #'   and years as rownames where years with IADF are marked with 1,
 #'   those without with 0, years not covered by the series are set to NA.
 #' @references Osborn TJ, Briffa KR and Jones PD (1997) Adjusting variance for
-#'   sample-size in tree-ring chronologies and other regional-mean timeseries.
+#'   sample-size in tree-ring chronologies and other regional mean time-series.
 #'   Dendrochronologia 15, 89-99.
 #' @return a data frame
 #' @seealso \code{\link{frp}}
@@ -83,10 +83,9 @@ afrp <- function(iadf) {
 #'   pith offset as number of rings in the second column
 #' @references
 #'   Novak, Klemen and Sánchez, Miguel Angel Saz and Čufar, Katarina and
-#'   Raventós, Josep and de Luis, Martin, te and intra-annual density
+#'   Raventós, Josep and de Luis, Martin. Age, climate and intra-annual density
 #'   fluctuations in in Spain, IAWA Journal, 34, 459-474 (2013),
-#'   DOI:https://doi.org/10.1163/22941932-00000037
-#'   \url{http://booksandjournals.brillonline.com/content/journals/10.1163/22941932-00000037}.
+#'   doi:10.1163/22941932-00000037
 #' @return a data frame
 #' @export
 #' @seealso \code{\link{novak_weibull}},
@@ -187,10 +186,9 @@ novak_weibull_find_start <- function(novak_freq_object, min.n = 15, max_a = 10,
 #' @param ... additional plotting arguments
 #' @references
 #'   Novak, Klemen and Sánchez, Miguel Angel Saz and Čufar, Katarina and
-#'   Raventós, Josep and de Luis, Martin, te and intra-annual density
+#'   Raventós, Josep and de Luis, Martin. Age, climate and intra-annual density
 #'   fluctuations in in Spain, IAWA Journal, 34, 459-474 (2013),
-#'   DOI:https://doi.org/10.1163/22941932-00000037
-#'   \url{http://booksandjournals.brillonline.com/content/journals/10.1163/22941932-00000037}.
+#'   doi:10.1163/22941932-00000037
 #' @return a model object of class "nls"
 #' @export
 #' @seealso \code{\link{novak_freq}},
@@ -250,10 +248,9 @@ novak_weibull <- function(novak_freq_object, min.n = 15, start = NULL,
 #' @param method method for the RCS detrending, 'quotient' or 'difference'
 #' @references
 #'   Novak, Klemen and Sánchez, Miguel Angel Saz and Čufar, Katarina and
-#'   Raventós, Josep and de Luis, Martin, te and intra-annual density
+#'   Raventós, Josep and de Luis, Martin.  Age, climate and intra-annual density
 #'   fluctuations in in Spain, IAWA Journal, 34, 459-474 (2013),
-#'   DOI:https://doi.org/10.1163/22941932-00000037
-#'   \url{http://booksandjournals.brillonline.com/content/journals/10.1163/22941932-00000037}.
+#'   doi:10.1163/22941932-00000037
 #' @export
 #' @seealso \code{\link{novak_freq}}, \code{\link{novak_weibull}}
 #' @examples
@@ -306,7 +303,6 @@ novak_index <- function(iadf, model, po = NULL, method = "difference"){
 #'   Campelo, F., Vieira, J., Battipaglia, G. et al. Which matters most for the
 #'   formation of intra-annual density fluctuations in Pinus pinaster: age or
 #'   size? Trees (2015) 29: 237. doi:10.1007/s00468-014-1108-9
-#'   \url{http://link.springer.com/article/10.1007/s00468-014-1108-9}.
 #' @export
 #' @seealso  \code{\link{campelo_chapman}}, \code{\link{campelo_index}}
 #' @importFrom rlang .data
@@ -478,7 +474,6 @@ campelo_chapman_find_start <- function(campelo_freq_object, min.n = 15,
 #'   Campelo, F., Vieira, J., Battipaglia, G. et al. Which matters most for the
 #'   formation of intra-annual density fluctuations in Pinus pinaster: age or
 #'   size? Trees (2015) 29: 237. doi:10.1007/s00468-014-1108-9
-#'   \url{http://link.springer.com/article/10.1007/s00468-014-1108-9}.
 #' @examples
 #' data('example_iadf')
 #' data('example_rwl')
@@ -539,7 +534,6 @@ campelo_chapman <- function(campelo_freq_object, min.n = 15, start = NULL,
 #'   Campelo, F., Vieira, J., Battipaglia, G. et al. Which matters most for the
 #'   formation of intra-annual density fluctuations in Pinus pinaster: age or
 #'   size? Trees (2015) 29: 237. doi:10.1007/s00468-014-1108-9
-#'   \url{http://link.springer.com/article/10.1007/s00468-014-1108-9}.
 #' @examples
 #' data('example_iadf')
 #' data('example_rwl')

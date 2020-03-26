@@ -4,7 +4,9 @@
 \name{example_rwl}
 \alias{example_rwl}
 \title{example_rwl}
-\format{A data.frame with 135 years and 30 series.}
+\format{
+A data.frame with 135 years and 30 series.
+}
 \usage{
 example_rwl
 }

@@ -4,8 +4,13 @@
 \alias{novak_weibull_find_start}
 \title{novak_weibull_find_start}
 \usage{
-novak_weibull_find_start(novak_freq_object, min.n = 15, max_a = 10,
-  max_b = 3, max_c = 30)
+novak_weibull_find_start(
+  novak_freq_object,
+  min.n = 15,
+  max_a = 10,
+  max_b = 3,
+  max_c = 30
+)
 }
 \arguments{
 \item{novak_freq_object}{A novak_freq_object as obtained from

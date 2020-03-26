@@ -4,7 +4,9 @@
 \name{example_iadf}
 \alias{example_iadf}
 \title{example_iadf}
-\format{A data.frame with 135 years and 30 series.}
+\format{
+A data.frame with 135 years and 30 series.
+}
 \usage{
 example_iadf
 }
