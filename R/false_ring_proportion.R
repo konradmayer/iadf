@@ -576,7 +576,7 @@ campelo_index <- function(iadf, rwl, model){
                                               na.rm = TRUE))
     names(mean_index) <- c("year", "index")
 
-    spline <- dplR::ffcsaps(mean_index[["index"]])
+    spline <- dplR::caps(mean_index[["index"]])
     detrend_index <- dplyr::mutate(mean_index,
                                    detrended_index = .data$index - spline)
 
@@ -623,7 +623,7 @@ campelo_index <- function(iadf, rwl, model){
                                               na.rm = TRUE))
     names(mean_index) <- c("year", "index")
 
-    spline <- dplR::ffcsaps(mean_index[["index"]])
+    spline <- dplR::caps(mean_index[["index"]])
     detrend_index <- dplyr::mutate_(mean_index, .dots = setNames(list(
       lazyeval::interp(~ i - s, i = as.name("index"), s = as.name("spline"))),
       "detrended_index"))
