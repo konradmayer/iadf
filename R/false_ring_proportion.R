@@ -331,8 +331,8 @@ campelo_freq <- function(iadf, rwl, n = 20){
     iadf_tidy <- iadf %>%
       tibble::rownames_to_column("year") %>%
       tibble::as_tibble() %>%
-      dplyr::mutate(year = as.integer(.data$year)) %>%
-      tidyr::gather("series", "iadf", -.data$year) %>%
+      dplyr::mutate(year = as.integer(year)) %>%
+      tidyr::gather("series", "iadf", -year) %>%
       dplyr::filter(!is.na(.data$iadf))
 
     rwl_tidy <- tidy_rwl(rwl) %>%
