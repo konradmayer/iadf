@@ -313,6 +313,7 @@ novak_index <- function(iadf, model, po = NULL, method = "difference"){
 #' model <- campelo_chapman(campelo_freq(example_iadf, example_rwl))
 #' campelo_index(example_iadf, example_rwl, model)
 campelo_freq <- function(iadf, rwl, n = 20){
+  year <- NULL # silence R CMD check
   if (utils::packageVersion("dplyr") > "0.5.0") {
     if (!is.data.frame(iadf)) {
       stop("iadf has to be a data.frame")
