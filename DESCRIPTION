@@ -22,7 +22,7 @@ Suggests: lazyeval,
     testthat,
     knitr,
     rmarkdown
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.3
 VignetteBuilder: knitr
 URL: https://github.com/konradmayer/iadf
 BugReports: https://github.com/konradmayer/iadf/issues

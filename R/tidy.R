@@ -35,13 +35,16 @@ untidy_crn <- function(tidy_crn) {
 #' @rdname tidyrwl
 #' @export
 tidy_rwl <- function(rwl, value_col = "rwl") {
+  # silence R CMD check
+  year <- series <- NULL
+  
   rwl %>%
     tibble::rownames_to_column("year") %>%
     tibble::as_tibble() %>%
-    dplyr::mutate(year = as.numeric(.data$year)) %>%
-    tidyr::pivot_longer(cols = -.data$year, names_to = "series",
+    dplyr::mutate(year = as.numeric(year)) %>%
+    tidyr::pivot_longer(cols = -year, names_to = "series",
                         values_to = value_col, values_drop_na = TRUE) %>%
-    dplyr::arrange(.data$series)
+    dplyr::arrange(series)
 }
 
 #' @rdname tidyrwl
